@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 轮式里程计与航位推算新手课程" />
+    <title>04 · 轮式里程计 | AXIS/ROS</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818f"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-02.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-04.css?v=20260818a" />
+  </head>
+  <body class="module02-body module04-body">
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topbar module02-topbar">
+      <a class="brand" href="./index.html" aria-label="返回课程首页"><span class="brand-symbol"><i></i><i></i><i></i></span><span><b>AXIS</b><em>/ROS</em><small>WHEEL ODOMETRY LAB</small></span></a>
+      <div class="top-center"><span class="live-dot"></span>MODULE 04 ODOMETRY CONSOLE<span class="coordinate">ROS_DISTRO / HUMBLE</span></div>
+      <div class="top-actions"><div class="profile">HZ<span>CADET / 07</span></div></div>
+    </header>
+
+    <div class="module02-shell">
+      <aside class="module02-nav">
+        <div class="module02-title course-rail-header"><span>COURSE MODULE</span><div><b>04</b><strong>轮式里程计</strong><small>JOINTSTATE · ODOMETRY · TF</small></div></div>
+        <div class="module02-progress"><div><span>模块进度</span><b id="module02Percent">0%</b></div><i><em id="module02Bar"></em></i><small>8 MISSIONS · ODOMETRY BUILD ROUTE</small></div>
+        <nav class="course-module-links course-rail-nav" aria-label="课程模块">
+          <span>COURSE ROUTE / 全局导航</span>
+          <a href="./index.html"><span>HOME</span><div><b>课程首页</b><small>总览 · 路线 · 进度</small></div><i>⌂</i></a>
+          <a href="./module-00.html"><span>00</span><div><b>环境部署</b><small>Docker · Gazebo · Workspace</small></div><i id="module02EnvState">○</i></a>
+          <a href="./module-01.html"><span>01</span><div><b>ROS 2 通信基础</b><small>Nodes · Topics · TF · RViz</small></div><i id="module02CommState">○</i></a>
+          <a href="./module-02.html"><span>02</span><div><b>SLAM 与自主导航</b><small>Map · AMCL · Nav2</small></div><i id="module03NavState">○</i></a>
+          <a href="./module-03.html"><span>03</span><div><b>创建 ROS 2 功能包</b><small>Python · colcon · rclpy</small></div><i id="module03PackageState">○</i></a><a class="active" href="./module-04.html" aria-current="page"><span>04</span><div><b>轮式里程计</b><small>JointState · Pose · TF</small></div><i>→</i></a>
+        </nav>
+
+        <div class="mission-filter module02-filter"><span>FIND A MISSION</span><div><i>⌕</i><input id="module02Filter" aria-label="搜索里程计任务" placeholder="搜索 JointState、Pose、TF…" /></div><small id="module02FilterCount">8 MISSIONS VISIBLE</small></div>
+        <nav class="module02-lesson-list" aria-label="轮式里程计章节">
+          <button class="active" data-lesson="odometry_model"><span>04.01</span><div><small>MENTAL MODEL</small><b>先看懂里程计</b><em>Pose · Drift · Evidence</em></div><i>→</i></button>
+          <button data-lesson="joint_states"><span>04.02</span><div><small>INPUT CONTRACT</small><b>读懂 JointState</b><em>Names · Wheels · Preflight</em></div><i>02</i></button>
+          <button data-lesson="differential_kinematics"><span>04.03</span><div><small>KINEMATICS</small><b>轮速变成 v / ω</b><em>Radius · Separation · Sign</em></div><i>03</i></button>
+          <button data-lesson="pose_integration"><span>04.04</span><div><small>INTEGRATION</small><b>积分得到 Pose</b><em>dt · x · y · theta</em></div><i>04</i></button>
+          <button data-lesson="odometry_message"><span>04.05</span><div><small>MESSAGE CONTRACT</small><b>发布 Odometry</b><em>Topic · Pose · Twist</em></div><i>05</i></button>
+          <button data-lesson="quaternion_frames"><span>04.06</span><div><small>FRAME BOUNDARY</small><b>Quaternion 与坐标系</b><em>odom · base_link · TF</em></div><i>06</i></button>
+          <button data-lesson="path_validation"><span>04.07</span><div><small>VALIDATION</small><b>绘制并审查轨迹</b><em>Matplotlib · Slip · Drift</em></div><i>07</i></button>
+          <button data-lesson="odometry_delivery"><span>04.08</span><div><small>MODULE CHECK</small><b>综合交付与恢复</b><em>Clean Shell · Handoff</em></div><i>08</i></button>
+        </nav>
+        <section class="module02-phase-map"><span>LEARNING PHASES</span><div><i>01</i><b>建立模型<small>04.01–04.02</small></b></div><div><i>02</i><b>推导与积分<small>04.03–04.04</small></b></div><div><i>03</i><b>消息与坐标<small>04.05–04.06</small></b></div><div><i>04</i><b>验证与交付<small>04.07–04.08</small></b></div></section>
+      </aside>
+
+      <main class="module02-main">
+        <section class="module02-hero module04-hero">
+          <div class="module02-hero-copy"><span>LEARNING PATH / MODULE 04</span><h1>让轮子转过的距离，<br /><em>变成机器人走过的轨迹。</em></h1><p>从 JointState 读出左右轮速，按差速运动学计算机体速度，再用仿真时间积分 Pose，发布可验证的 Odometry 消息。你会同时看到公式、代码、坐标系和真实运动之间的边界。</p><div class="hero-status-strip"><div><small>INPUT</small><b>/joint_states</b></div><div><small>OUTPUT</small><b>/robot_odometry</b></div><div><small>FRAMES</small><b>odom → base_link</b></div></div></div>
+          <div class="navigation-blueprint odometry-blueprint" aria-label="轮式里程计数据流蓝图">
+            <div class="blueprint-head"><span>ODOMETRY PIPELINE / LIVE SCHEMATIC</span><b>8 MISSIONS</b></div>
+            <svg viewBox="0 0 620 470" role="img" aria-label="左右轮、差速运动学、积分位姿与里程计消息关系图">
+              <defs><pattern id="odomGrid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" /></pattern><filter id="odomGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+              <rect class="odom-grid" x="36" y="45" width="548" height="370" />
+              <g class="odom-wheels"><circle cx="135" cy="168" r="46"/><circle cx="135" cy="320" r="46"/><path d="M112 168h46M135 145v46M112 320h46M135 297v46"/></g>
+              <g class="odom-chassis"><rect x="220" y="121" width="150" height="246" rx="26"/><path d="M295 151v178M258 226h74"/></g>
+              <path class="odom-flow" d="M181 168h39M181 320h39M370 244h86"/>
+              <g class="odom-equation"><rect x="220" y="194" width="150" height="98"/><text x="295" y="222" text-anchor="middle">v = (vᵣ + vₗ) / 2</text><text x="295" y="248" text-anchor="middle">ω = (vᵣ − vₗ) / L</text><text x="295" y="274" text-anchor="middle">∫ v dt → POSE</text></g>
+              <g class="odom-message" transform="translate(490 244)"><rect x="-52" y="-54" width="104" height="108" rx="8"/><path d="M-32 -22h64M-32 0h48M-32 22h64"/><circle cy="-66" r="8"/></g>
+              <path class="odom-axis" d="M295 350v54M295 404l-7-10M295 404l7-10M295 404h50M345 404l-10-7M345 404l-10 7"/>
+              <g class="blueprint-labels"><text x="74" y="78">LEFT / RIGHT WHEELS</text><text x="220" y="105">DIFF DRIVE MODEL</text><text x="455" y="205">ODOMETRY MSG</text><text x="350" y="433">x · y · θ</text></g>
+            </svg>
+            <div class="blueprint-legend"><span><i class="lime"></i>WHEEL INPUT</span><span><i class="cyan"></i>INTEGRATION PATH</span><span><i class="orange"></i>POSE OUTPUT</span></div>
+          </div>
+        </section>
+
+        <section class="module02-entry-guide"><div><span>CURRENT LESSON</span><b id="lessonGuideTitle">04.01 · 先看懂里程计</b></div><div><span>WHY NOW</span><b id="lessonGuideReason">先理解轮速如何变成位姿，后面每段代码都沿用这条链</b></div><button id="lessonGuideAction" type="button">进入本节初始界面 <i>↓</i></button></section>
+
+        <section class="module02-lesson" id="module02Lesson">
+          <header class="lesson-head"><div><span id="lessonCode">04.01</span><p id="lessonCategory">MENTAL MODEL / ODOMETRY</p><h2 id="lessonTitle">先看懂里程计</h2><p id="lessonIntro"></p></div><div class="lesson-time"><span>ESTIMATED</span><b id="lessonTime">34</b><small>MINUTES</small></div></header>
+          <div class="lesson-route"><div><span>学完你能</span><b id="lessonLearn"></b></div><div><span>现在先做</span><b id="lessonDo"></b></div><div><span>课后任务</span><b id="lessonAfter"></b></div></div>
+          <nav class="module02-stage-nav" aria-label="本节学习阶段"><button class="active" data-stage="understand"><i>01</i><span><b>先理解</b><small>建立概念和前后关系</small></span></button><button data-stage="chain"><i>02</i><span><b>看装配链</b><small>依次追踪四个节点</small></span></button><button data-stage="lab"><i>03</i><span><b>做真实实验</b><small>一次只确认一步</small></span></button><button data-stage="verify"><i>04</i><span><b>验收与任务</b><small>诊断、复盘、交付</small></span></button></nav>
+          <div class="learning-guard module02-learning-guard" id="module02LearningGuard"><i>新手保护</i><div><b id="module02GuardTitle">先理解轮式里程计</b><small id="module02GuardText">依次查看三个概念，先知道输入、算法、误差与输出证据。</small></div><span id="module02GuardState">理解阶段</span></div>
+
+          <section class="stage-panel understand-panel" data-stage-panel="understand">
+            <div class="prerequisite-card"><span>开始前先确认</span><p id="lessonPrerequisite"></p></div>
+            <div class="concept-workbench"><nav id="conceptSelector" aria-label="本节核心概念"></nav><article class="concept-inspector"><span id="conceptLabel">CONCEPT / 01</span><h3 id="conceptTitle">核心概念</h3><p id="conceptDefinition"></p><div><b>边界、误区与实际作用</b><p id="conceptDetail"></p></div></article></div>
+            <div class="knowledge-bridge"><div><span>从哪里接过来</span><b id="knowledgeBefore"></b></div><i>→</i><div><span>本节建立什么</span><b id="knowledgeCurrent"></b></div><i>→</i><div><span>下一节用在哪里</span><b id="knowledgeNext"></b></div></div>
+          </section>
+
+          <section class="stage-panel chain-panel" data-stage-panel="chain" hidden><header><div><span>ODOMETRY CHAIN / INTERACTIVE</span><h3>沿箭头追踪轮速变成 Pose 的每一站。</h3></div><p>四个节点必须按顺序查看。这里解释输入、变换、输出与故障边界；真实编码和验证放在下一阶段。</p></header><div class="system-chain-workbench"><div class="system-chain-nodes" id="systemChainNodes"></div><article class="system-node-inspector"><span id="systemNodeTag">NODE / 01</span><h3 id="systemNodeTitle"></h3><b id="systemNodeRole"></b><p id="systemNodeDetail"></p><div><span>观察点预览 · 暂不执行</span><code id="systemNodePreview"></code></div></article></div></section>
+
+          <section class="stage-panel lab-panel" data-stage-panel="lab" hidden><div class="lab-brief"><div><span>REAL TERMINAL LAB</span><h3 id="labTitle"></h3><p id="labIntro"></p></div><div><b>做到什么才算完成</b><p id="labSuccess"></p></div><div><b>失败时停在哪里</b><p id="labRecovery"></p></div></div><p class="terminal-honesty"><b>页面不会替你运行 ROS：</b>先核对 SIM、BUILD、RUN、INSPECT、COMMAND 或 IDE 职责，再在真实课程容器操作。只有看到匹配证据才确认；失败后保留第一条原始错误。</p><div class="module02-command-list" id="module02Commands"></div><div class="module02-output" id="module02Output"><i>READY</i> 从第一步开始，后续步骤暂时锁定。</div></section>
+
+          <section class="stage-panel verify-panel" data-stage-panel="verify" hidden><div class="diagnostic-scenario"><div class="scenario-copy"><span>FIELD DIAGNOSIS</span><h3 id="scenarioTitle"></h3><div><span>OBSERVED SYMPTOM</span><b id="scenarioSymptom"></b></div><p id="scenarioQuestion"></p></div><div class="scenario-console"><div id="scenarioOptions"></div><p id="scenarioFeedback">先观察证据，再选择第一项检查_</p></div></div><section class="mastery-checks"><header><span>WHAT YOU LEARNED</span><h3>先用自己的话回答，再展开核对。</h3><p>所有问题只使用本节已经解释和操作过的内容。</p></header><div id="masteryChecks"></div></section><section class="after-mission"><span>AFTER LESSON / INDEPENDENT TASK</span><div><h3 id="afterTitle"></h3><p id="afterText"></p><b id="afterDeliverable"></b><div class="completion-gates"><i id="labGate">实验证据 · 0/4</i><i id="scenarioGate">诊断 · 待完成</i><i id="checkGate">掌握检查 · 0/3</i></div></div><button id="completeLesson" type="button">确认完成本节 <i>→</i></button></section></section>
+        </section>
+
+        <footer class="module02-footer"><button id="previousLesson" type="button">← MODULE 03</button><div><span>NEXT MISSION</span><b id="nextLessonName">04.02 · 读懂 JointState</b></div><button id="nextLesson" type="button">NEXT MISSION →</button></footer>
+      </main>
+
+      <aside class="module02-status"><div class="module02-status-inner"><div class="module-status-title"><span>READINESS PANEL</span><b>04</b></div><div class="module02-gauge"><div><b id="module02GaugePercent">0%</b><span>ODOMETRY<br />READY</span></div></div><section class="prerequisite-readiness" id="prerequisiteReadiness"><span>ENTRY READINESS / 建议前置</span><div><i id="readiness00">○</i><b>模块 00<small>容器、仿真与时间</small></b></div><div><i id="readiness01">○</i><b>模块 01<small>Topic、TF 与 RViz</small></b></div><div><i id="readiness02">○</i><b>模块 02<small>地图、定位与导航</small></b></div><div><i id="readiness03">○</i><b>模块 03<small>Python 包与 colcon</small></b></div><p id="readinessMessage">允许预览；真实编码前建议先完成环境、通信、导航与功能包基础。</p></section><section class="current-lesson-evidence"><span>CURRENT LESSON / 当前任务证据</span><header><i id="statusLessonCode">04.01</i><b id="statusLessonTitle">先看懂里程计</b></header><div id="statusUnderstand"><i>01</i><b>先理解<small>当前进入点</small></b></div><div id="statusChain"><i>02</i><b>装配链<small>0 / 4 个节点</small></b></div><div id="statusLab"><i>03</i><b>真实实验<small>0 / 4 条证据</small></b></div><div id="statusVerify"><i>04</i><b>验收任务<small>等待实验证据</small></b></div></section><section class="current-action"><span>CURRENT ACTION</span><b id="currentActionText">先查看第一个核心概念</b><button id="currentActionButton" type="button">带我到下一步 ↓</button></section><section class="terminal-matrix"><span>TERMINAL RESPONSIBILITIES</span><div><i>SIM</i><b>唯一仿真<small>Gazebo · /clock · /joint_states</small></b></div><div><i>BUILD</i><b>构建 Overlay<small>colcon · source · keep</small></b></div><div><i>RUN</i><b>里程计节点<small>python · use_sim_time</small></b></div><div><i>INSP</i><b>只读证据<small>topic · node · echo</small></b></div><div><i>IDE</i><b>编辑源码<small>odometry_publisher.py</small></b></div></section><section class="lesson-quick-reference"><span>THIS LESSON / QUICK REFERENCE</span><div id="lessonQuickCommands"></div></section></div></aside>
+    </div>
+
+    <div class="toast" id="module02Toast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./module-04-content.js?v=20260818a"></script>
+    <script src="./module-04-app.js?v=20260818a"></script>
+  </body>
+</html>

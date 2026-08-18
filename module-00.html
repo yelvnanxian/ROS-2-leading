@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 机器人学习课程环境部署模块" />
+    <title>00 · 环境部署 | AXIS/ROS</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./environment.css?v=20260818g" />
+  </head>
+  <body class="deployment-body">
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topbar deployment-topbar">
+      <a class="brand" href="./index.html" aria-label="返回课程首页"><span class="brand-symbol"><i></i><i></i><i></i></span><span><b>AXIS</b><em>/ROS</em><small>ENVIRONMENT PROVISIONING</small></span></a>
+      <div class="top-center"><span class="live-dot amber"></span>ENVIRONMENT PROVISIONING CONSOLE<span class="coordinate">PROFILE / ROS2-HUMBLE</span></div>
+      <div class="top-actions"><div class="profile">HZ<span>CADET / 07</span></div></div>
+    </header>
+
+    <div class="deployment-shell">
+      <aside class="deployment-nav">
+        <div class="deploy-module-title course-rail-header"><span>COURSE MODULE</span><div><b>00</b><strong>环境部署</strong><small>ENVIRONMENT SETUP</small></div></div>
+        <div class="deployment-progress"><div><span>模块完成度</span><b id="envProgressText">0%</b></div><div class="deploy-track"><i id="envProgressBar"></i></div><small id="envProgressMeta">0 / 5 TASKS VERIFIED</small></div>
+        <nav class="module-switcher course-rail-nav" aria-label="课程模块"><span>COURSE ROUTE / 全局导航</span><a href="./index.html"><span>HOME</span><div><b>课程首页</b><small>总览 · 路线 · 进度</small></div><i>⌂</i></a><a class="current active" href="./module-00.html" aria-current="page"><span>00</span><div><b>环境部署</b><small>Docker · Gazebo · Workspace</small></div><i>→</i></a><a href="./module-01.html"><span>01</span><div><b>ROS 2 通信基础</b><small>Nodes · Topics · TF · RViz</small></div><i>→</i></a><a href="./module-02.html"><span>02</span><div><b>SLAM 与自主导航</b><small>Slam Toolbox · Nav2 · AMCL</small></div><i>→</i></a><a href="./module-03.html"><span>03</span><div><b>创建 ROS 2 功能包</b><small>Python · colcon · rclpy</small></div><i>→</i></a><a href="./module-04.html"><span>04</span><div><b>轮式里程计</b><small>JointState · Pose · TF</small></div><i>→</i></a></nav>
+        <nav class="setup-task-list" aria-label="环境部署任务">
+          <button class="active" data-task="requirements"><span>00.01</span><div><small>START HERE</small><b>认识实验环境</b><em>系统要求与课程地图</em></div><i>→</i></button>
+          <button data-task="docker"><span>00.02</span><div><small>CONTAINER</small><b>获取仓库与 Docker</b><em>Clone · Compose · Image</em></div><i>02</i></button>
+          <button data-task="workspace"><span>00.03</span><div><small>FILESYSTEM</small><b>工作空间与目录挂载</b><em>src · build · install · log</em></div><i>03</i></button>
+          <button data-task="simulation"><span>00.04</span><div><small>SIMULATION</small><b>启动 Andino 仿真</b><em>Gazebo · RViz · Launch</em></div><i>04</i></button>
+          <button data-task="validation"><span>00.05</span><div><small>ACCEPTANCE</small><b>环境验收与排错</b><em>Topics · Nodes · TF · Reset</em></div><i>05</i></button>
+        </nav>
+        <div class="setup-route-rail"><span>WHERE COMMANDS RUN</span><div><i>H</i><b>HOST<small>Git · Docker · xhost</small></b></div><div><i>S</i><b>SIM<small>Andino Launch · 始终保持运行</small></b></div><div><i>I</i><b>INSPECT<small>ROS 2 检查命令 · 可反复使用</small></b></div><div><i>G</i><b>GAZEBO / RVIZ<small>需要手动点击的 GUI</small></b></div></div>
+        <div class="platform-warning"><span>PLATFORM NOTICE</span><b>直接支持：Ubuntu 22.04 · x86_64</b><p>Apple Silicon 请先使用仓库提供的 UTM 教程，不要直接套用 Docker Desktop 流程。</p></div>
+      </aside>
+
+      <main class="deployment-main">
+        <section class="deployment-hero">
+          <div class="deployment-copy"><div class="deploy-serial"><span id="taskCode">TASK 00.01</span><i></i><span>SETUP / BEGINNER</span></div><p class="deploy-overline" id="taskCategory">SYSTEM ORIENTATION</p><h1 id="taskTitle">先搭好实验室，再启动机器人。</h1><p id="taskIntro">这一模块会把电脑配置成可重复、可重置的 ROS 2 机器人实验环境。每一步都会解释为什么做、执行什么、看到什么才算成功。</p><div class="deploy-specs"><div><small>ESTIMATED</small><b id="taskTime">08 MIN</b></div><div><small>DIFFICULTY</small><b>零基础</b></div><div><small>OUTPUT</small><b id="taskOutput">部署路线图</b></div></div></div>
+          <div class="deployment-visual">
+            <div class="rack-label"><span>SYSTEM ARCHITECTURE</span><b id="architectureStatus">4 LAYERS IDENTIFIED</b></div>
+            <div class="architecture-stack" id="architectureStack">
+              <button data-layer="host"><span>04</span><div><b>HOST MACHINE</b><small>Ubuntu 22.04 · x86_64</small></div><i></i></button>
+              <button data-layer="docker"><span>03</span><div><b>DOCKER ENGINE</b><small>isolated runtime + volumes</small></div><i></i></button>
+              <button data-layer="ros"><span>02</span><div><b>ROS 2 HUMBLE</b><small>DDS · packages · CLI</small></div><i></i></button>
+              <button data-layer="sim"><span>01</span><div><b>GAZEBO + ANDINO</b><small>physics · sensors · robot</small></div><i></i></button>
+            </div>
+            <div class="layer-inspector"><span id="layerLabel">LAYER / HOST</span><b id="layerTitle">Ubuntu 22.04 主机</b><p id="layerText">参考课程的直接支持基线是 x86_64 Ubuntu 22.04。Apple Silicon 需要先按仓库说明使用 UTM 准备 Ubuntu。</p></div>
+          </div>
+        </section>
+
+        <section class="deployment-guide">
+          <div><span>这一节会学到</span><b id="guideLearn">Docker、ROS 2、Gazebo 各自负责什么</b></div><div><span>现在要做</span><b id="guideDo">确认电脑和课程要求，再认识四层架构</b></div><div><span>完成后的任务</span><b id="guideAfter">能画出数据从宿主机到机器人仿真的路径</b></div><button id="jumpProcedure">开始本任务 ↓</button>
+        </section>
+
+        <section class="deployment-content">
+          <nav class="deployment-stage-nav" aria-label="本任务学习阶段"><button class="active" data-env-stage="learn"><i>01</i><span><b>先理解</b><small>先知道为什么</small></span></button><button data-env-stage="practice"><i>02</i><span><b>再执行</b><small>一次只做一步</small></span></button><button data-env-stage="review"><i>03</i><span><b>后验收</b><small>证据齐了再进入</small></span></button></nav>
+          <div class="learning-guard env-learning-guard" id="envLearningGuard"><i>新手保护</i><div><b id="envGuardTitle">先理解这一步会改变什么</b><small id="envGuardText">不要急着复制命令。看懂宿主机、容器和 ROS 2 的边界后再操作。</small></div><span id="envGuardState">理解阶段</span></div>
+          <div class="content-heading" data-env-stage-panel="learn"><span id="contentCode">00.01 / ORIENTATION</span><h2 id="contentTitle">你将使用什么样的实验环境？</h2><p id="contentLead">本课程使用 Docker 固定 ROS 2 Humble、Gazebo、RViz 和 Andino 的版本。这样可以先专注机器人概念，不会因为每台电脑的依赖不同而反复卡住。</p></div>
+
+          <section class="env-knowledge-map" data-env-stage-panel="learn">
+            <header><span>KNOWLEDGE GRAPH / 本节知识图谱</span><h2>先看清概念之间怎么连接，再开始执行。</h2><p>下面不是四个孤立定义，而是一条从前置条件到可验证结果的学习链。每个节点都会说明它在本节中的作用。</p></header>
+            <div class="env-knowledge-flow" id="envKnowledgeFlow"></div>
+            <div class="env-knowledge-inspector"><div><span id="envKnowledgeLabel">NODE / 01</span><h3 id="envKnowledgeTitle">当前概念</h3><p id="envKnowledgeText">点击上方节点查看完整解释。</p></div><div><span>与前后内容的关系</span><b id="envKnowledgeRelation">这是本节的起点。</b><p id="envKnowledgeEvidence">完成对应检查后，要能指出真实证据。</p></div></div>
+            <div class="env-knowledge-context"><div><span>进入本节前</span><b id="envKnowledgeBefore">先确认课程与电脑的关系</b></div><div><span>本节核心关系</span><b id="envKnowledgeCurrent">理解环境各层如何协作</b></div><div><span>学完能产出</span><b id="envKnowledgeOutput">留下可以复查的真实证据</b></div></div>
+          </section>
+
+          <section class="procedure-console" id="procedureConsole" data-env-stage-panel="practice" hidden>
+            <div class="procedure-head"><div><span>GUIDED PROCEDURE</span><b id="procedureTitle">开始前确认</b></div><span id="procedureCounter">0 / 3 VERIFIED</span></div>
+            <div class="procedure-body"><div class="procedure-steps" id="procedureSteps"></div><aside class="procedure-help"><span>不会出错的操作顺序</span><h3 id="helpTitle">一次只做当前亮起的步骤</h3><p id="helpText">先确认“在哪里执行”，再复制命令。只有真实输出与“看到这个再确认”一致时，才点击确认。</p><div><b>本节最终成功标志</b><p id="successText">你能说出宿主机、Docker、ROS 2 与 Gazebo 的职责。</p></div></aside></div>
+            <div class="deploy-terminal"><div class="terminal-head"><span>YOUR REAL TERMINAL</span><b>MANUAL EXECUTION</b></div><p class="terminal-disclaimer">页面不会连接或操作你的电脑。请复制命令到真实终端，看到匹配结果后再确认。</p><div class="deploy-output" id="deployOutput"><i>READY</i> 先复制第一步命令。</div></div>
+          </section>
+
+          <section class="deployment-knowledge" data-env-stage-panel="review" hidden><div class="knowledge-head"><span>WHAT YOU LEARNED</span><h2>完成这一小节后，你应该能回答：</h2></div><div class="knowledge-checks" id="knowledgeChecks"></div></section>
+
+          <section class="deployment-trouble" data-env-stage-panel="review" hidden><div><span>WHEN SOMETHING FAILS</span><h2 id="troubleTitle">新手排错顺序</h2><p id="troubleLead">不要同时修改很多东西。先确认当前失败发生在哪一层。</p></div><div class="trouble-matrix" id="troubleMatrix"></div></section>
+
+          <section class="deployment-after" data-env-stage-panel="review" hidden><span>AFTER-SECTION TASK</span><div><h2 id="afterTitle">画出你的实验系统</h2><p id="afterText">用四个方框画出 Host → Docker → ROS 2 → Gazebo，并在每层写下一个职责。</p></div><button id="completeSetupTask">MARK TASK COMPLETE <i>→</i></button></section>
+
+          <footer class="deployment-footer"><button id="previousSetupTask">← PREVIOUS</button><div><span>NEXT</span><b id="nextTaskName">00.02 · 获取仓库与 Docker</b></div><button id="nextSetupTask">NEXT TASK →</button></footer>
+        </section>
+      </main>
+
+      <aside class="deployment-status">
+        <div class="deployment-status-inner">
+        <div class="status-title"><span>READINESS PANEL</span><b>SYS/00</b></div>
+        <div class="readiness-score"><div><b id="readinessPercent">0%</b><span>LAB<br />READY</span></div></div>
+        <div class="current-task-evidence"><span>CURRENT TASK / 当前任务证据</span><header><i id="statusTaskCode">00.01</i><b id="statusTaskTitle">认识实验环境</b></header><div id="envLearnGate"><i>01</i><b>先理解<small>建立本节关系图</small></b></div><div id="envPracticeGate"><i>02</i><b>再执行<small>0 / 5 条真实证据</small></b></div><div id="envReviewGate"><i>03</i><b>后验收<small>等待真实步骤完成</small></b></div></div>
+        <div class="machine-profile"><span>COURSE BASELINE</span><div><small>HOST</small><b>UBUNTU 22.04 / X86_64</b></div><div><small>ROS</small><b>HUMBLE / CONTAINER</b></div><div><small>SIM</small><b>IGNITION FORTRESS</b></div><div><small>DOMAIN</small><b>ROS_DOMAIN_ID=42</b></div></div>
+        <a class="course-reference" href="https://github.com/henki-robotics/robotics_essentials_ros2/tree/main/0-setup" target="_blank" rel="noreferrer"><span>REFERENCE SOURCE</span><b>Henki Robotics · Setup</b><small>打开原始课程说明 ↗</small></a>
+        <div class="setup-safety"><span>LAB SAFETY / HABITS</span><ol><li>长时间命令用 Ctrl+C 停止</li><li>不要删除宿主机 exercises_ws/src</li><li>完成 GUI 实验后可运行 xhost -</li><li>一次只启动一个 Andino Launch</li><li>保存真实输出，不照抄示例</li></ol></div>
+        <div class="evidence-legend"><span>EVIDENCE LEVELS</span><div><i>01</i><b>命令存在<small>command found</small></b></div><div><i>02</i><b>进程运行<small>process alive</small></b></div><div><i>03</i><b>数据流动<small>message / frequency</small></b></div><div><i>04</i><b>行为正确<small>robot responds</small></b></div></div>
+          <div class="deployment-tip"><span>CURRENT NEXT ACTION</span><b id="statusNextAction">阅读四层架构并执行第一个确认步骤</b><button id="statusJump">带我到下一步 ↓</button></div>
+        </div>
+      </aside>
+    </div>
+    <div class="toast" id="envToast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./environment.js?v=20260818h"></script>
+  </body>
+</html>

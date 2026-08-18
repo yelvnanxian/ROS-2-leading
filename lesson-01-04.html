@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="面向真实机器人任务的 ROS 2 交互学习实验室" />
+    <title>01.04 · 控制 Andino 底盘 | AXIS/ROS</title>
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="返回 AXIS ROS 课程首页">
+        <span class="brand-symbol"><i></i><i></i><i></i></span>
+        <span><b>AXIS</b><em>/ROS</em><small>ROBOTICS TRAINING SYSTEM</small></span>
+      </a>
+      <div class="top-center">
+        <span class="live-dot"></span>
+        TRAINING ENVIRONMENT ONLINE
+        <span class="coordinate">N 62°36' · E 29°45'</span>
+      </div>
+      <div class="top-actions">
+        <button class="search-trigger" id="searchBtn"><span>⌕</span> SEARCH <kbd>⌘K</kbd></button>
+        <button class="profile">HZ<span>CADET / 07</span></button>
+      </div>
+    </header>
+
+    <div class="app-shell" id="top">
+      <aside class="syllabus">
+        <div class="aside-heading">
+          <span>PROGRAM INDEX</span>
+          <b>06 MODULES</b>
+        </div>
+        <div class="program-progress">
+          <div><span>总训练进度</span><b id="programPercent">24%</b></div>
+          <div class="metal-track"><i id="programBar"></i></div>
+          <small>12.4 / 48 TRAINING HOURS</small>
+        </div>
+
+        <nav class="module-list" aria-label="课程模块">
+          <button class="module done" data-module="环境部署" data-href="./module-00.html">
+            <span class="module-index">00</span>
+            <span><small>COMPLETED</small><b>环境部署</b><em>Docker · Gazebo · Workspace</em></span>
+            <i>✓</i>
+          </button>
+          <button class="module active" data-module="ROS 2 通信基础" data-href="./module-01.html">
+            <span class="module-index">01</span>
+            <span><small>ACTIVE · 04/08</small><b>ROS 2 通信基础</b><em>Nodes · Topics · TF · RViz</em></span>
+            <i>→</i>
+          </button>
+          <button class="module locked" data-module="SLAM 与自主导航">
+            <span class="module-index">02</span>
+            <span><small>LOCKED</small><b>SLAM 与自主导航</b><em>Slam Toolbox · Nav2 · AMCL</em></span>
+            <i>⌁</i>
+          </button>
+          <button class="module locked" data-module="创建 ROS 2 功能包">
+            <span class="module-index">03</span>
+            <span><small>LOCKED</small><b>创建 ROS 2 功能包</b><em>Python · colcon · rclpy</em></span>
+            <i>⌁</i>
+          </button>
+          <button class="module locked" data-module="轮式里程计">
+            <span class="module-index">04</span>
+            <span><small>LOCKED</small><b>轮式里程计</b><em>Kinematics · Odometry · JointState</em></span>
+            <i>⌁</i>
+          </button>
+          <button class="module locked" data-module="路径规划系统">
+            <span class="module-index">05</span>
+            <span><small>LOCKED</small><b>路径规划系统</b><em>Costmap · Planner · Behavior Tree</em></span>
+            <i>⌁</i>
+          </button>
+        </nav>
+
+        <div class="reference-note">
+          <span>SOURCE MATERIAL</span>
+          <b>Robotics & ROS 2 Essentials</b>
+          <a href="https://github.com/henki-robotics/robotics_essentials_ros2" target="_blank" rel="noreferrer">HENKI ROBOTICS ↗</a>
+        </div>
+      </aside>
+
+      <main class="main-console">
+        <section class="mission-hero">
+          <div class="hero-copy">
+            <div class="serial"><span>MISSION 01.04</span><i></i><span>ROS2-HUMBLE</span></div>
+            <p class="overline">COMMUNICATION SYSTEMS / PRACTICAL LAB</p>
+            <h1>让 Andino<br /><span>接收你的指令。</span></h1>
+            <p class="hero-intro">建立从终端到机器人底盘的完整通信链路。你不只会运行命令，还会理解消息如何穿过 Topic、如何检查类型，以及为什么 TF 决定了机器人“看到的世界”。</p>
+            <div class="mission-specs">
+              <div><small>DIFFICULTY</small><b>基础 / L1</b></div>
+              <div><small>FIELD TIME</small><b>45 MIN</b></div>
+              <div><small>DELIVERABLE</small><b>可控移动底盘</b></div>
+            </div>
+          </div>
+
+          <div class="robot-viewport" aria-label="Andino 移动机器人结构示意">
+            <div class="viewport-head"><span>UNIT / ANDINO-A01</span><b>SIMULATION LINKED</b></div>
+            <svg viewBox="0 0 620 390" role="img" aria-label="Andino 机器人机械蓝图">
+              <defs>
+                <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3d4549"/><stop offset=".5" stop-color="#171c1f"/><stop offset="1" stop-color="#596267"/></linearGradient>
+                <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g class="blueprint-grid"><path d="M0 65H620M0 130H620M0 195H620M0 260H620M0 325H620M103 0V390M206 0V390M309 0V390M412 0V390M515 0V390"/></g>
+              <g class="dimension"><path d="M105 345H515M105 337V353M515 337V353"/><text x="270" y="370">410 MM CHASSIS</text></g>
+              <g class="robot-unit">
+                <ellipse cx="310" cy="300" rx="190" ry="28" class="shadow"/>
+                <g class="wheel left"><rect x="120" y="205" width="76" height="105" rx="24"/><path d="M135 218v79M153 213v91M172 218v79"/></g>
+                <g class="wheel right"><rect x="424" y="205" width="76" height="105" rx="24"/><path d="M439 218v79M457 213v91M476 218v79"/></g>
+                <path class="chassis" d="M185 155h250l35 63-34 66H184l-34-66z"/>
+                <path class="deck" d="M210 138h200l25 18H185z"/>
+                <rect class="battery" x="240" y="187" width="140" height="65" rx="4"/>
+                <path class="battery-line" d="M256 202h75M256 216h49M256 230h90"/>
+                <circle class="bolt" cx="199" cy="174" r="7"/><circle class="bolt" cx="421" cy="174" r="7"/><circle class="bolt" cx="199" cy="265" r="7"/><circle class="bolt" cx="421" cy="265" r="7"/>
+                <g class="lidar"><rect x="275" y="93" width="70" height="42" rx="5"/><ellipse cx="310" cy="93" rx="38" ry="10"/><path d="M310 91V56"/><circle cx="310" cy="50" r="10"/></g>
+                <g class="sensor"><circle cx="212" cy="214" r="18"/><circle cx="408" cy="214" r="18"/><circle cx="212" cy="214" r="7"/><circle cx="408" cy="214" r="7"/></g>
+                <path class="signal" d="M270 45a57 57 0 0 1 80 0M250 25a85 85 0 0 1 120 0"/>
+              </g>
+              <g class="callout"><path d="M345 92h128l25-25"/><circle cx="345" cy="92" r="3"/><text x="478" y="57">LIDAR /scan</text><path d="M410 214h90l28 22"/><circle cx="410" cy="214" r="3"/><text x="486" y="258">RANGE SENSOR</text><path d="M241 231H91L65 253"/><circle cx="241" cy="231" r="3"/><text x="18" y="274">MCU /cmd_vel</text></g>
+            </svg>
+            <div class="telemetry-strip"><span><i></i> POWER 82%</span><span>LINK 38ms</span><span>SIM / REALTIME 1.00</span></div>
+          </div>
+        </section>
+
+        <section class="beginner-guide" id="beginnerGuide">
+          <div class="guide-position"><span>YOU ARE HERE</span><b id="guideStep">第 1 步 · 确认实验环境</b><small id="guideContext">先让 ROS 2、Gazebo 和机器人仿真正常运行</small></div>
+          <div class="guide-action"><span>DO THIS NOW</span><b id="guideAction">依次执行两条绿色 EXECUTE 命令</b><small id="guideExpected">成功标志：终端出现 Container Started 与 Simulation Ready</small></div>
+          <button id="guideJump">GO TO CURRENT TASK <span>↓</span></button>
+        </section>
+
+        <section class="mission-brief panel-corners">
+          <div class="section-id"><span>01</span><small>MISSION<br />BRIEFING</small></div>
+          <div class="brief-main">
+            <p class="overline">WHY THIS MATTERS</p>
+            <h2>先理解通信链路，再写机器人代码。</h2>
+            <p>真实机器人出现“不动”“数据丢失”“RViz 看不到传感器”等问题时，根因通常不在算法，而在通信图、消息类型或坐标系。这个任务会建立一套可复用的排查顺序。</p>
+          </div>
+          <div class="outcome-grid">
+            <div><span>01</span><b>识别通信图</b><p>区分节点、话题、发布者与订阅者。</p></div>
+            <div><span>02</span><b>检查消息接口</b><p>从 Topic 反查消息类型与字段。</p></div>
+            <div><span>03</span><b>发送运动指令</b><p>用 Twist 控制线速度和角速度。</p></div>
+            <div><span>04</span><b>验证 TF 链路</b><p>理解 map → odom → base_link。</p></div>
+          </div>
+        </section>
+
+        <nav class="step-rail" aria-label="实验步骤">
+          <button class="active" data-target="step-1"><span>01</span><small>SYSTEM CHECK</small><b>确认实验环境</b></button>
+          <button data-target="step-2"><span>02</span><small>TOPIC OPS</small><b>侦察通信图</b></button>
+          <button data-target="step-3"><span>03</span><small>ACTUATION</small><b>发布运动指令</b></button>
+          <button data-target="step-4"><span>04</span><small>SPATIAL DATA</small><b>校验 TF 坐标</b></button>
+          <i id="stepProgress"></i>
+        </nav>
+
+        <section class="lab-section" id="step-1">
+          <header class="section-header">
+            <div><span>STEP / 01</span><h2>确认实验环境</h2></div>
+            <b>预计 05 MIN</b>
+          </header>
+          <div class="step-guide">
+            <div><span>学什么</span><b>理解 ROS 2 实验环境的三层结构</b></div>
+            <div><span>现在做</span><b>启动 Docker 容器与 Andino 仿真</b></div>
+            <div><span>成功标志</span><b>Gazebo 中出现机器人，RViz 无红色报错</b></div>
+          </div>
+          <div class="explain-grid">
+            <div class="instruction">
+              <p class="lead">先确认三层系统都在线：容器提供 ROS 2 运行环境，Gazebo 负责物理模拟，RViz 负责观察消息与坐标。</p>
+              <div class="stack-diagram">
+                <div><span>03</span><b>RVIZ</b><small>VISUALIZATION</small><i>订阅 /scan、/tf、/image_raw</i></div>
+                <div><span>02</span><b>ROS 2 HUMBLE</b><small>MIDDLEWARE</small><i>发现节点并路由 DDS 消息</i></div>
+                <div><span>01</span><b>GAZEBO + ANDINO</b><small>SIMULATION</small><i>模拟底盘、传感器与物理世界</i></div>
+              </div>
+            </div>
+            <aside class="field-note">
+              <span class="note-tag">FIELD NOTE / 001</span>
+              <h3>为什么要用 Docker？</h3>
+              <p>它固定了 ROS 2、Gazebo 和依赖包版本。学习时先消除环境差异，之后再理解原生安装。</p>
+              <ul><li>无需预装 ROS 2</li><li>练习环境可以重置</li><li>与参考仓库完全一致</li></ul>
+            </aside>
+          </div>
+
+          <div class="command-block">
+            <div class="command-meta"><span>BOOT SEQUENCE</span><b>TERMINAL / HOST</b></div>
+            <div class="code-lines">
+              <div><span>01</span><code>cd robotics_essentials_ros2/docker/</code><button class="copy-btn" data-copy="cd robotics_essentials_ros2/docker/">COPY</button></div>
+              <div><span>02</span><code>docker compose up -d</code><button class="execute-btn" data-command="docker compose up -d" data-task="env">EXECUTE</button></div>
+              <div><span>03</span><code>docker exec -it robotics_essentials_ros2 bash</code><button class="copy-btn" data-copy="docker exec -it robotics_essentials_ros2 bash">COPY</button></div>
+              <div><span>04</span><code>ros2 launch andino_gz andino_gz.launch.py</code><button class="execute-btn" data-command="ros2 launch andino_gz andino_gz.launch.py" data-task="sim">EXECUTE</button></div>
+            </div>
+            <div class="console-output" id="bootOutput"><span>SYS</span> Waiting for boot command_</div>
+          </div>
+        </section>
+
+        <section class="lab-section" id="step-2">
+          <header class="section-header">
+            <div><span>STEP / 02</span><h2>侦察 ROS 2 通信图</h2></div>
+            <b>预计 12 MIN</b>
+          </header>
+          <div class="step-guide">
+            <div><span>学什么</span><b>看懂节点、Topic 与消息类型的关系</b></div>
+            <div><span>现在做</span><b>依次运行 LIST、INFO、INTERFACE</b></div>
+            <div><span>成功标志</span><b>找到 /cmd_vel 的 Twist 类型和 x、z 字段</b></div>
+          </div>
+          <div class="concept-switcher">
+            <div class="switch-tabs" role="tablist">
+              <button class="active" data-concept="topic">TOPIC</button>
+              <button data-concept="service">SERVICE</button>
+              <button data-concept="action">ACTION</button>
+            </div>
+            <div class="concept-detail">
+              <span id="conceptMode">ASYNC / MANY-TO-MANY</span>
+              <h3 id="conceptTitle">连续数据流：发布者不等待响应</h3>
+              <p id="conceptText">适合传感器数据、速度指令和状态更新。发布者与订阅者彼此解耦，可以随时加入或离开通信图。</p>
+            </div>
+          </div>
+
+          <div class="network-console">
+            <div class="network-head"><span><i></i> ROS GRAPH / LIVE</span><b id="packetRate">24 PKT/S</b></div>
+            <div class="network-stage" id="networkStage">
+              <svg viewBox="0 0 900 330" preserveAspectRatio="none" aria-hidden="true">
+                <path class="net-line a" d="M145 165C265 165 270 82 420 82"/>
+                <path class="net-line b" d="M420 82C575 82 575 118 742 118"/>
+                <path class="net-line c" d="M145 165C305 165 300 250 470 250"/>
+                <circle class="data-packet p1" r="5"><animateMotion dur="1.8s" repeatCount="indefinite" path="M145 165C265 165 270 82 420 82"/></circle>
+                <circle class="data-packet p2" r="5"><animateMotion begin=".5s" dur="1.4s" repeatCount="indefinite" path="M420 82C575 82 575 118 742 118"/></circle>
+                <circle class="data-packet p3" r="5"><animateMotion begin=".8s" dur="1.7s" repeatCount="indefinite" path="M145 165C305 165 300 250 470 250"/></circle>
+              </svg>
+              <div class="net-node teleop"><small>NODE / PUBLISHER</small><b>/teleop_node</b><span>USER INPUT</span></div>
+              <div class="net-topic cmd"><small>TOPIC</small><b>/cmd_vel</b><span>geometry_msgs/Twist</span></div>
+              <div class="net-node driver"><small>NODE / SUBSCRIBER</small><b>/diff_drive_controller</b><span>MOTOR DRIVER</span></div>
+              <div class="net-topic scan"><small>TOPIC</small><b>/scan</b><span>sensor_msgs/LaserScan</span></div>
+            </div>
+            <div class="network-footer"><button id="burstBtn">INJECT TEST PACKET →</button><span><i class="pub"></i> PUBLISHER</span><span><i class="sub"></i> SUBSCRIBER</span><span><i class="topic"></i> TOPIC</span></div>
+          </div>
+
+          <div class="guided-task">
+            <div class="task-copy"><span>GUIDED TASK / 02-A</span><h3>不要猜消息结构，让 CLI 告诉你。</h3><p>按顺序运行命令，建立“发现 → 检查 → 查看接口”的标准排查路径。</p></div>
+            <div class="mini-terminal">
+              <div class="terminal-head"><span>robot@andino:~</span><b>ROS_DOMAIN_ID=0</b></div>
+              <div class="terminal-history" id="terminalHistory"><p><i>READY</i> Type or select a command to begin.</p></div>
+              <div class="terminal-input"><span>robot@andino:~$</span><input id="terminalInput" value="ros2 topic list" spellcheck="false"/><button id="runTerminal">RUN ↵</button></div>
+              <div class="command-presets">
+                <button data-preset="ros2 topic list">LIST</button>
+                <button data-preset="ros2 topic info /cmd_vel">INFO</button>
+                <button data-preset="ros2 interface show geometry_msgs/msg/Twist">INTERFACE</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lab-section" id="step-3">
+          <header class="section-header">
+            <div><span>STEP / 03</span><h2>发布运动指令</h2></div>
+            <b>预计 10 MIN</b>
+          </header>
+          <div class="step-guide">
+            <div><span>学什么</span><b>把速度意图转换为 Twist 消息</b></div>
+            <div><span>现在做</span><b>调节 linear.x 与 angular.z 后发送</b></div>
+            <div><span>成功标志</span><b>机器人按设定速度前进或原地转向</b></div>
+          </div>
+          <div class="twist-lab">
+            <div class="twist-explain">
+              <p class="lead">差速底盘只需要两个关键量：沿机器人 X 轴前进的 <code>linear.x</code>，以及绕 Z 轴旋转的 <code>angular.z</code>。</p>
+              <div class="axis-model">
+                <div class="axis-robot"><span></span><i class="wheel-l"></i><i class="wheel-r"></i></div>
+                <div class="axis x">X / LINEAR</div><div class="axis z">Z / ANGULAR</div>
+              </div>
+            </div>
+            <div class="control-rack">
+              <div class="rack-head"><span>MANUAL COMMAND GENERATOR</span><b>geometry_msgs/msg/Twist</b></div>
+              <label>LINEAR.X <output id="linearOut">0.20 m/s</output><input id="linearRange" type="range" min="-0.5" max="0.5" step="0.05" value="0.2" /></label>
+              <label>ANGULAR.Z <output id="angularOut">0.00 rad/s</output><input id="angularRange" type="range" min="-1" max="1" step="0.1" value="0" /></label>
+              <pre id="generatedCommand">ros2 topic pub /cmd_vel geometry_msgs/msg/Twist \
+"{linear: {x: 0.20}, angular: {z: 0.00}}"</pre>
+              <button id="sendMotion">TRANSMIT MOTION COMMAND <span>→</span></button>
+            </div>
+          </div>
+          <div class="safety-warning"><b>SAFETY INTERLOCK</b><p>真实机器人测试前先抬起驱动轮或保留急停。停止命令：<code>linear.x: 0.0</code> 与 <code>angular.z: 0.0</code>。</p><span>!</span></div>
+        </section>
+
+        <section class="lab-section" id="step-4">
+          <header class="section-header">
+            <div><span>STEP / 04</span><h2>校验 TF 坐标链</h2></div>
+            <b>预计 13 MIN</b>
+          </header>
+          <div class="step-guide">
+            <div><span>学什么</span><b>理解传感器数据所在的坐标系</b></div>
+            <div><span>现在做</span><b>逐个点击 TF 节点并阅读父子关系</b></div>
+            <div><span>成功标志</span><b>能解释 map 到 laser_link 的完整链路</b></div>
+          </div>
+          <div class="tf-layout">
+            <div class="tf-tree">
+              <div class="tf-head"><span>TF TREE / FRAME VIEW</span><b>5 FRAMES DETECTED</b></div>
+              <div class="tf-canvas">
+                <svg viewBox="0 0 620 390" aria-hidden="true">
+                  <path d="M310 69V120M310 168V214M310 260V315M310 237H455V315M310 237H165V315"/>
+                </svg>
+                <button class="frame map active" data-frame="map"><span>GLOBAL</span><b>map</b></button>
+                <button class="frame odom" data-frame="odom"><span>LOCAL WORLD</span><b>odom</b></button>
+                <button class="frame base" data-frame="base"><span>ROBOT BODY</span><b>base_link</b></button>
+                <button class="frame laser" data-frame="laser"><span>SENSOR</span><b>laser_link</b></button>
+                <button class="frame camera" data-frame="camera"><span>SENSOR</span><b>camera_link</b></button>
+              </div>
+            </div>
+            <div class="frame-inspector">
+              <span>FRAME INSPECTOR</span>
+              <h3 id="frameName">map</h3>
+              <p id="frameText">全局固定参考系。地图与导航目标通常定义在这里，允许机器人在整个已知环境中定位。</p>
+              <dl><div><dt>PARENT</dt><dd id="frameParent">—</dd></div><div><dt>DRIFT</dt><dd id="frameDrift">NONE</dd></div><div><dt>USED BY</dt><dd id="frameUse">NAV2 / SLAM</dd></div></dl>
+              <div class="diagnostic-tip"><b>看不到数据？</b><p>先检查 RViz 的 Fixed Frame 是否与消息 frame_id 之间存在完整 TF 链。</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="advanced-lab">
+          <header class="advanced-head">
+            <div><span>EXPANSION LAB / OPTIONAL</span><h2>从“消息能发”进阶到“消息可靠”。</h2></div>
+            <div class="advanced-badge">DDS / QoS</div>
+          </header>
+          <div class="advanced-intro">
+            <p>ROS 2 底层使用 DDS。节点即使发现了彼此，如果 QoS 策略不兼容，数据仍然可能完全收不到。相机、雷达、地图等数据对可靠性与历史缓存的要求并不相同。</p>
+            <span>本节不影响任务验收，但它能解释很多“Topic 明明存在，为什么 echo 不到”的真实问题。</span>
+          </div>
+
+          <div class="qos-policies">
+            <article><span>POLICY / 01</span><h3>Reliability</h3><b>尽力而为 or 可靠送达</b><p>传感器通常优先低延迟；控制与状态数据常需要可靠传输。</p></article>
+            <article><span>POLICY / 02</span><h3>Durability</h3><b>只看新消息 or 保留最后状态</b><p>地图等晚加入的订阅者，可能需要立刻拿到发布者之前的数据。</p></article>
+            <article><span>POLICY / 03</span><h3>History / Depth</h3><b>缓存多少条消息</b><p>消费速度落后时，队列深度决定旧消息是排队还是被丢弃。</p></article>
+          </div>
+
+          <div class="qos-simulator">
+            <div class="qos-copy">
+              <span>COMPATIBILITY SIMULATOR</span>
+              <h3>组合发布端与订阅端策略</h3>
+              <p>可靠发布者可以满足尽力而为订阅者；反过来则不成立，因为发布端无法提供订阅者要求的可靠保证。</p>
+            </div>
+            <div class="qos-rack">
+              <label><span>PUBLISHER / RELIABILITY</span><select id="publisherQos"><option value="reliable">RELIABLE</option><option value="best_effort">BEST EFFORT</option></select></label>
+              <div class="qos-link"><i></i><b>DDS LINK</b><i></i></div>
+              <label><span>SUBSCRIBER / RELIABILITY</span><select id="subscriberQos"><option value="reliable">RELIABLE</option><option value="best_effort">BEST EFFORT</option></select></label>
+              <div class="qos-result compatible" id="qosResult"><i></i><span><b>COMPATIBLE</b>双方可以建立数据连接</span></div>
+            </div>
+          </div>
+
+          <div class="sensor-analyzer">
+            <div class="sensor-visual">
+              <div class="sensor-head"><span>LASERSCAN / LIVE SAMPLE</span><b id="scanTimestamp">T+ 12.042s</b></div>
+              <svg viewBox="0 0 560 330" id="radarSvg" aria-label="激光雷达扫描数据示意">
+                <g class="radar-grid"><path d="M280 286A75 75 0 0 1 227 158M280 286A150 150 0 0 1 174 30M280 286A220 220 0 0 1 124 0M280 286A75 75 0 0 0 333 158M280 286A150 150 0 0 0 386 30M280 286A220 220 0 0 0 436 0M60 286H500M280 286L98 104M280 286L462 104M280 286V20"/></g>
+                <path class="scan-area" id="scanArea" d="M280 286L121 131L173 80L236 153L271 93L313 143L381 72L452 139L280 286Z"/>
+                <g class="scan-rays"><path d="M280 286L121 131M280 286L173 80M280 286L236 153M280 286L271 93M280 286L313 143M280 286L381 72M280 286L452 139"/></g>
+                <g class="scan-points"><circle cx="121" cy="131" r="4"/><circle cx="173" cy="80" r="4"/><circle cx="236" cy="153" r="4"/><circle cx="271" cy="93" r="4"/><circle cx="313" cy="143" r="4"/><circle cx="381" cy="72" r="4"/><circle cx="452" cy="139" r="4"/></g>
+                <g class="scan-robot"><path d="M252 264h56l12 31h-80z"/><circle cx="253" cy="292" r="8"/><circle cx="307" cy="292" r="8"/></g>
+              </svg>
+            </div>
+            <div class="sensor-data">
+              <span>MESSAGE INSPECTOR</span>
+              <h3>sensor_msgs/msg/LaserScan</h3>
+              <dl>
+                <div><dt>angle_min</dt><dd>-1.5708 rad</dd></div>
+                <div><dt>angle_max</dt><dd>+1.5708 rad</dd></div>
+                <div><dt>angle_increment</dt><dd>0.0087 rad</dd></div>
+                <div><dt>range_min / max</dt><dd>0.12 / 12.0 m</dd></div>
+                <div class="highlight"><dt>nearest valid range</dt><dd id="nearestRange">0.84 m</dd></div>
+              </dl>
+              <button id="sampleScan">CAPTURE NEXT SCAN <span>↻</span></button>
+              <p><b>阅读要点：</b><code>ranges[i]</code> 不是世界坐标，而是从 <code>laser_link</code> 出发、在对应角度上的距离。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="diagnostics">
+          <div class="diag-head"><div><span>FAULT ISOLATION</span><h2>故障不是意外，排查也是课程的一部分。</h2></div><b>FIELD GUIDE / 01</b></div>
+          <div class="diag-table">
+            <div class="diag-row head"><span>症状</span><span>首先检查</span><span>诊断命令</span><span>常见根因</span></div>
+            <div class="diag-row"><b>机器人不移动</b><span>/cmd_vel 是否有发布者</span><code>ros2 topic info /cmd_vel</code><span>消息字段错误 / 仿真暂停</span></div>
+            <div class="diag-row"><b>RViz 看不到雷达</b><span>Fixed Frame 与 TF 链</span><code>ros2 run tf2_tools view_frames</code><span>frame_id 不连通</span></div>
+            <div class="diag-row"><b>找不到节点</b><span>Domain ID 与容器</span><code>ros2 node list</code><span>ROS_DOMAIN_ID 不一致</span></div>
+          </div>
+        </section>
+
+        <section class="assessment">
+          <div class="assessment-copy"><span>MISSION CHECK / 01</span><h2>最后一道系统判断</h2><p>RViz 能收到 <code>/scan</code>，但画面提示 “No transform from laser_link to map”。最合理的第一步是什么？</p></div>
+          <div class="answer-grid">
+            <button data-correct="false"><span>A</span><b>提高 /scan 发布频率</b></button>
+            <button data-correct="true"><span>B</span><b>检查 Fixed Frame 与 TF 树</b></button>
+            <button data-correct="false"><span>C</span><b>重新定义 LaserScan 消息</b></button>
+          </div>
+          <p class="answer-feedback" id="answerFeedback"></p>
+        </section>
+
+        <section class="mission-debrief">
+          <div class="debrief-title"><span>MISSION DEBRIEF</span><h2>完成这一课后，你应该能独立做到这些。</h2><p>下面不是“看过就算”，而是可验证的能力标准。绿色项目代表你已经在本页实际完成。</p></div>
+          <div class="capability-list">
+            <div data-capability="env"><i>01</i><span><b>启动实验系统</b><small>独立启动容器、Gazebo 与 Andino</small></span></div>
+            <div data-capability="graph"><i>02</i><span><b>读懂通信接口</b><small>从 Topic 查到类型，再查到消息字段</small></span></div>
+            <div data-capability="motion"><i>03</i><span><b>控制移动底盘</b><small>构造 Twist 控制前进、后退与转向</small></span></div>
+            <div data-capability="quiz"><i>04</i><span><b>定位 TF 问题</b><small>根据 RViz 报错检查 Fixed Frame 和 TF 树</small></span></div>
+          </div>
+          <div class="independent-challenge">
+            <span>AFTER-CLASS MISSION / 15 MIN</span>
+            <div><h3>不使用预设按钮，让机器人完成“前进 1 米 → 原地左转 → 停止”。</h3><p>先写出需要的三条 <code>ros2 topic pub</code> 命令，再在仿真中执行。记录每条命令对应的 linear.x 与 angular.z。</p></div>
+            <button id="challengeBtn">VIEW TASK CHECKLIST <span>+</span></button>
+            <ol id="challengeChecklist" hidden>
+              <li>写出前进命令，并说明为什么 angular.z 为 0</li>
+              <li>写出左转命令，并说明 ROS 2 中 Z 轴正方向</li>
+              <li>发送全零 Twist，确认机器人停止</li>
+              <li>用 <code>ros2 topic echo /odom</code> 观察位姿变化</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="learning-tools">
+          <div class="glossary-panel">
+            <div class="tool-head"><span>KNOWLEDGE BASE</span><b>核心术语速查</b></div>
+            <details open><summary><span>01</span>Node / 节点<i>+</i></summary><p>一个独立运行的计算单元。机器人系统通常由多个职责单一的节点组成，例如驱动、定位、规划与传感器处理。</p></details>
+            <details><summary><span>02</span>Topic / 话题<i>+</i></summary><p>具名的异步数据通道。消息类型必须一致，但发布者和订阅者不需要知道彼此的具体身份。</p></details>
+            <details><summary><span>03</span>TF / 坐标变换<i>+</i></summary><p>随时间维护不同坐标系之间的平移与旋转关系，使传感器数据能够被转换到统一参考系。</p></details>
+            <details><summary><span>04</span>QoS / 服务质量<i>+</i></summary><p>DDS 通信策略集合，决定可靠性、持久性、消息历史和截止时间等行为。</p></details>
+          </div>
+          <div class="field-log">
+            <div class="tool-head"><span>CADET FIELD LOG</span><b>任务复盘</b></div>
+            <label for="learningNote">用自己的话解释 /cmd_vel 如何让机器人移动：</label>
+            <textarea id="learningNote" placeholder="例如：teleop 节点向 /cmd_vel 发布 Twist，底盘控制器订阅后将速度转换为左右轮指令……"></textarea>
+            <div><span id="noteStatus">LOCAL AUTOSAVE ENABLED</span><button id="saveNote">SAVE FIELD LOG</button></div>
+            <p>能解释清楚数据从哪里产生、经过哪里、被谁消费，才算真正掌握。</p>
+          </div>
+        </section>
+
+        <section class="next-path">
+          <div class="next-path-head"><span>CONTINUE TRAINING</span><h2>接下来，机器人将开始理解环境。</h2></div>
+          <div class="path-cards">
+            <article data-href="./lesson-01-05.html"><span>01.05</span><small>NEXT / 35 MIN</small><h3>在 RViz 中观察传感器世界</h3><p>可视化相机、雷达与机器人模型，掌握 Display 与 Fixed Frame。</p><b>4 LAB STEPS →</b></article>
+            <article><span>02.01</span><small>LOCKED / 70 MIN</small><h3>用 Slam Toolbox 建立地图</h3><p>遥控 Andino 探索环境，理解 OccupancyGrid 与回环检测。</p><b>REQUIRES MODULE 01</b></article>
+            <article><span>02.02</span><small>LOCKED / 90 MIN</small><h3>让 Nav2 自主抵达目标</h3><p>配置 AMCL 位姿，观察全局路径、局部规划与恢复行为。</p><b>REQUIRES 02.01</b></article>
+          </div>
+        </section>
+
+        <footer class="mission-footer">
+          <div><span>NEXT MISSION</span><b>01.05 · 用 RViz 观察传感器世界</b></div>
+          <button id="completeMission">COMPLETE MISSION <span>→</span></button>
+        </footer>
+      </main>
+
+      <aside class="telemetry-panel">
+        <div class="telemetry-title"><span>MISSION CONTROL</span><b>01.04</b></div>
+        <div class="radial-progress" id="radialProgress" style="--progress: 50deg">
+          <div><b id="missionPercent">14%</b><span>MISSION<br />PROGRESS</span></div>
+        </div>
+        <div class="objective-list">
+          <span>OBJECTIVES / LIVE</span>
+          <label class="complete"><i>✓</i><span>理解三层实验环境<small>SYSTEM CHECK</small></span></label>
+          <label data-objective="env"><i>02</i><span>启动 Docker 容器<small>BOOT ENVIRONMENT</small></span></label>
+          <label data-objective="sim"><i>03</i><span>启动 Andino 仿真<small>LAUNCH SIMULATION</small></span></label>
+          <label data-objective="graph"><i>04</i><span>检查 Topic 接口<small>INSPECT GRAPH</small></span></label>
+          <label data-objective="motion"><i>05</i><span>发布 Twist 指令<small>COMMAND CHASSIS</small></span></label>
+          <label data-objective="quiz"><i>06</i><span>通过任务验收<small>FINAL CHECK</small></span></label>
+        </div>
+        <div class="system-health">
+          <div><span>ROS GRAPH</span><b class="ok">ONLINE</b></div>
+          <div><span>DDS LATENCY</span><b>12 ms</b></div>
+          <div><span>SIM CLOCK</span><b>1.00×</b></div>
+          <div><span>PACKET LOSS</span><b>0.02%</b></div>
+        </div>
+        <div class="mentor-card">
+          <span>AI FIELD MENTOR</span>
+          <p>卡住时不要立刻重启。先描述“预期、实际、最后一个成功步骤”，这是机器人调试最重要的习惯。</p>
+          <button id="hintBtn">GET CONTEXTUAL HINT →</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="search-modal" id="searchModal" aria-hidden="true">
+      <div class="search-box">
+        <div><span>⌕</span><input id="searchInput" placeholder="搜索命令、概念、任务…" /><kbd>ESC</kbd></div>
+        <p>建议：输入 “TF”、“cmd_vel” 或 “Nav2”</p>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="./page-transition.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

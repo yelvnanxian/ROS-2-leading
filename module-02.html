@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 SLAM 与自主导航新手课程模块" />
+    <title>02 · SLAM 与自主导航 | AXIS/ROS</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-02.css?v=20260818f" />
+  </head>
+  <body class="module02-body">
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topbar module02-topbar">
+      <a class="brand" href="./index.html" aria-label="返回课程首页">
+        <span class="brand-symbol"><i></i><i></i><i></i></span>
+        <span><b>AXIS</b><em>/ROS</em><small>AUTONOMOUS NAVIGATION LAB</small></span>
+      </a>
+      <div class="top-center"><span class="live-dot"></span>MODULE 02 MAPPING CONSOLE<span class="coordinate">ROS_DISTRO / HUMBLE</span></div>
+      <div class="top-actions"><div class="profile">HZ<span>CADET / 07</span></div></div>
+    </header>
+
+    <div class="module02-shell">
+      <aside class="module02-nav">
+        <div class="module02-title course-rail-header">
+          <span>COURSE MODULE</span>
+          <div><b>02</b><strong>SLAM 与自主导航</strong><small>MAPPING · LOCALIZATION · NAV2</small></div>
+        </div>
+        <div class="module02-progress">
+          <div><span>模块进度</span><b id="module02Percent">0%</b></div>
+          <i><em id="module02Bar"></em></i>
+          <small>8 MISSIONS · BEGINNER FIELD ROUTE</small>
+        </div>
+        <nav class="course-module-links course-rail-nav" aria-label="课程模块">
+          <span>COURSE ROUTE / 全局导航</span>
+          <a href="./index.html"><span>HOME</span><div><b>课程首页</b><small>总览 · 路线 · 进度</small></div><i>⌂</i></a>
+          <a href="./module-00.html"><span>00</span><div><b>环境部署</b><small>Docker · Gazebo · Workspace</small></div><i id="module02EnvState">○</i></a>
+          <a href="./module-01.html"><span>01</span><div><b>ROS 2 通信基础</b><small>Nodes · Topics · TF · RViz</small></div><i id="module02CommState">○</i></a>
+          <a class="active" href="./module-02.html" aria-current="page"><span>02</span><div><b>SLAM 与自主导航</b><small>Map · AMCL · Nav2</small></div><i>→</i></a>
+          <a href="./module-03.html"><span>03</span><div><b>创建 ROS 2 功能包</b><small>Python · colcon · rclpy</small></div><i>→</i></a>
+          <a href="./module-04.html"><span>04</span><div><b>轮式里程计</b><small>JointState · Pose · TF</small></div><i>→</i></a>
+        </nav>
+
+        <div class="mission-filter module02-filter">
+          <span>FIND A MISSION</span>
+          <div><i>⌕</i><input id="module02Filter" aria-label="搜索导航任务" placeholder="搜索地图、AMCL、Costmap…" /></div>
+          <small id="module02FilterCount">8 MISSIONS VISIBLE</small>
+        </div>
+
+        <nav class="module02-lesson-list" aria-label="SLAM 与导航章节">
+          <button class="active" data-lesson="slam_model"><span>02.01</span><div><small>MENTAL MODEL</small><b>先看懂 SLAM</b><em>Scan · Pose · Grid</em></div><i>→</i></button>
+          <button data-lesson="mapping_launch"><span>02.02</span><div><small>SYSTEM STARTUP</small><b>启动在线建图</b><em>Toolbox · /map · TF</em></div><i>02</i></button>
+          <button data-lesson="mapping_drive"><span>02.03</span><div><small>MAPPING OPERATION</small><b>覆盖与闭环质量</b><em>Teleop · Loop · Review</em></div><i>03</i></button>
+          <button data-lesson="map_save"><span>02.04</span><div><small>MAP ARTIFACT</small><b>保存与校验地图</b><em>YAML · PNG · Volume</em></div><i>04</i></button>
+          <button data-lesson="localization"><span>02.05</span><div><small>LOCALIZATION</small><b>AMCL 初始定位</b><em>Particles · Initial Pose</em></div><i>05</i></button>
+          <button data-lesson="nav2_stack"><span>02.06</span><div><small>PLAN + CONTROL</small><b>Nav2 目标与执行</b><em>Action · Costmap · Cmd</em></div><i>06</i></button>
+          <button data-lesson="recovery"><span>02.07</span><div><small>FIELD DEBUG</small><b>故障隔离与恢复</b><em>Observe · Isolate · Retry</em></div><i>07</i></button>
+          <button data-lesson="field_assessment"><span>02.08</span><div><small>MODULE CHECK</small><b>综合自主导航任务</b><em>Map · Locate · Navigate</em></div><i>08</i></button>
+        </nav>
+
+        <section class="module02-phase-map">
+          <span>LEARNING PHASES</span>
+          <div><i>01</i><b>建立地图<small>02.01–02.04</small></b></div>
+          <div><i>02</i><b>获得定位<small>02.05</small></b></div>
+          <div><i>03</i><b>规划与执行<small>02.06–02.07</small></b></div>
+          <div><i>04</i><b>综合交付<small>02.08</small></b></div>
+        </section>
+      </aside>
+
+      <main class="module02-main">
+        <section class="module02-hero">
+          <div class="module02-hero-copy">
+            <span>LEARNING PATH / MODULE 02</span>
+            <h1>让机器人<br /><em>知道自己在哪。</em></h1>
+            <p>从一束束 LaserScan 开始建立地图，再用 AMCL 找到机器人位姿，最后让 Nav2 把目标转换为路径和速度。你会看到完整的“感知 → 定位 → 规划 → 执行”闭环。</p>
+            <div class="hero-status-strip"><div><small>INPUT</small><b>/scan + TF</b></div><div><small>STATE</small><b>map → base_link</b></div><div><small>OUTPUT</small><b>/cmd_vel</b></div></div>
+          </div>
+          <div class="navigation-blueprint" aria-label="SLAM 与导航系统蓝图">
+            <div class="blueprint-head"><span>AUTONOMY STACK / LIVE SCHEMATIC</span><b>8 MISSIONS</b></div>
+            <svg viewBox="0 0 620 470" role="img" aria-label="机器人地图与规划路径示意图">
+              <defs>
+                <pattern id="mapGrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" /></pattern>
+                <filter id="navGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <rect class="map-grid" x="35" y="55" width="550" height="360" />
+              <path class="map-wall" d="M80 105H250V160H330V92H530V225H470V350H340V390H145V320H80Z" />
+              <path class="map-wall secondary" d="M145 160V265H250V320M330 160V270H405V350" />
+              <path class="planned-path" d="M125 280C175 240 215 278 270 230S365 180 420 215S470 180 510 145" />
+              <g class="path-points"><circle cx="125" cy="280" r="7"/><circle cx="270" cy="230" r="5"/><circle cx="420" cy="215" r="5"/><circle cx="510" cy="145" r="8"/></g>
+              <g class="robot-marker" transform="translate(125 280)"><circle r="25"/><path d="M0-20L13 10L0 5L-13 10Z"/></g>
+              <g class="scan-rays" transform="translate(125 280)"><path d="M0 0L-66-46M0 0L-78 7M0 0L-54 62M0 0L12-78M0 0L70-44"/></g>
+              <g class="blueprint-labels"><text x="55" y="82">OCCUPANCY GRID / MAP</text><text x="442" y="126">GOAL POSE</text><text x="285" y="215">GLOBAL PATH</text><text x="70" y="373">AMCL POSE</text></g>
+            </svg>
+            <div class="blueprint-legend"><span><i class="lime"></i>KNOWN FREE</span><span><i class="cyan"></i>PLANNED PATH</span><span><i class="orange"></i>ROBOT POSE</span></div>
+          </div>
+        </section>
+
+        <section class="module02-entry-guide">
+          <div><span>CURRENT LESSON</span><b id="lessonGuideTitle">02.01 · 先看懂 SLAM</b></div>
+          <div><span>WHY NOW</span><b id="lessonGuideReason">先建立地图生成链，避免把 RViz 画面误当作 SLAM 本身</b></div>
+          <button id="lessonGuideAction" type="button">进入本节初始界面 <i>↓</i></button>
+        </section>
+
+        <section class="module02-lesson" id="module02Lesson">
+          <header class="lesson-head">
+            <div><span id="lessonCode">02.01</span><p id="lessonCategory">MENTAL MODEL / MAPPING</p><h2 id="lessonTitle">先看懂 SLAM：机器人怎样边走边画地图</h2><p id="lessonIntro"></p></div>
+            <div class="lesson-time"><span>ESTIMATED</span><b id="lessonTime">32</b><small>MINUTES</small></div>
+          </header>
+
+          <div class="lesson-route">
+            <div><span>学完你能</span><b id="lessonLearn"></b></div>
+            <div><span>现在先做</span><b id="lessonDo"></b></div>
+            <div><span>课后任务</span><b id="lessonAfter"></b></div>
+          </div>
+
+          <nav class="module02-stage-nav" aria-label="本节学习阶段">
+            <button class="active" data-stage="understand"><i>01</i><span><b>先理解</b><small>建立概念和前后关系</small></span></button>
+            <button data-stage="chain"><i>02</i><span><b>看系统链</b><small>依次追踪四个节点</small></span></button>
+            <button data-stage="lab"><i>03</i><span><b>做真实实验</b><small>一次只确认一步</small></span></button>
+            <button data-stage="verify"><i>04</i><span><b>验收与任务</b><small>诊断、复盘、交付</small></span></button>
+          </nav>
+
+          <div class="learning-guard module02-learning-guard" id="module02LearningGuard">
+            <i>新手保护</i>
+            <div><b id="module02GuardTitle">先用白话理解 SLAM</b><small id="module02GuardText">依次查看三个概念；不需要背定义，要能说清它们为什么互相依赖。</small></div>
+            <span id="module02GuardState">理解阶段</span>
+          </div>
+
+          <section class="stage-panel understand-panel" data-stage-panel="understand">
+            <div class="prerequisite-card"><span>开始前先确认</span><p id="lessonPrerequisite"></p></div>
+            <div class="concept-workbench">
+              <nav id="conceptSelector" aria-label="本节核心概念"></nav>
+              <article class="concept-inspector">
+                <span id="conceptLabel">CONCEPT / 01</span>
+                <h3 id="conceptTitle">核心概念</h3>
+                <p id="conceptDefinition"></p>
+                <div><b>边界、误区与实际作用</b><p id="conceptDetail"></p></div>
+              </article>
+            </div>
+            <div class="knowledge-bridge">
+              <div><span>从哪里接过来</span><b id="knowledgeBefore"></b></div>
+              <i>→</i><div><span>本节建立什么</span><b id="knowledgeCurrent"></b></div>
+              <i>→</i><div><span>下一节用在哪里</span><b id="knowledgeNext"></b></div>
+            </div>
+          </section>
+
+          <section class="stage-panel chain-panel" data-stage-panel="chain" hidden>
+            <header><div><span>SYSTEM CHAIN / INTERACTIVE</span><h3>沿箭头找到数据第一次失效的位置。</h3></div><p>四个节点必须按顺序查看。这里解释系统关系，命令只是观察点预览；正式执行放在下一阶段。</p></header>
+            <div class="system-chain-workbench">
+              <div class="system-chain-nodes" id="systemChainNodes"></div>
+              <article class="system-node-inspector">
+                <span id="systemNodeTag">NODE / 01</span>
+                <h3 id="systemNodeTitle"></h3>
+                <b id="systemNodeRole"></b>
+                <p id="systemNodeDetail"></p>
+                <div><span>观察点预览 · 暂不执行</span><code id="systemNodePreview"></code></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="stage-panel lab-panel" data-stage-panel="lab" hidden>
+            <div class="lab-brief">
+              <div><span>REAL TERMINAL LAB</span><h3 id="labTitle"></h3><p id="labIntro"></p></div>
+              <div><b>做到什么才算完成</b><p id="labSuccess"></p></div>
+              <div><b>失败时停在哪里</b><p id="labRecovery"></p></div>
+            </div>
+            <p class="terminal-honesty"><b>页面不会替你执行命令：</b>先确认终端职责和必须保持运行的进程，再复制到真实课程容器。只有看到与说明一致的证据，才勾选并确认；失败时不允许跳步。</p>
+            <div class="module02-command-list" id="module02Commands"></div>
+            <div class="module02-output" id="module02Output"><i>READY</i> 从第一步开始，后续步骤暂时锁定。</div>
+          </section>
+
+          <section class="stage-panel verify-panel" data-stage-panel="verify" hidden>
+            <div class="diagnostic-scenario">
+              <div class="scenario-copy">
+                <span>FIELD DIAGNOSIS</span>
+                <h3 id="scenarioTitle"></h3>
+                <div><span>OBSERVED SYMPTOM</span><b id="scenarioSymptom"></b></div>
+                <p id="scenarioQuestion"></p>
+              </div>
+              <div class="scenario-console">
+                <div id="scenarioOptions"></div>
+                <p id="scenarioFeedback">先观察证据，再选择第一项检查_</p>
+              </div>
+            </div>
+            <section class="mastery-checks">
+              <header><span>WHAT YOU LEARNED</span><h3>用自己的话回答，再展开核对。</h3><p>这些问题只使用本节已经讲过的内容。每项核对后会记入本节验收。</p></header>
+              <div id="masteryChecks"></div>
+            </section>
+            <section class="after-mission">
+              <span>AFTER LESSON / INDEPENDENT TASK</span>
+              <div><h3 id="afterTitle"></h3><p id="afterText"></p><b id="afterDeliverable"></b><div class="completion-gates"><i id="labGate">实验证据 · 0/4</i><i id="scenarioGate">诊断 · 待完成</i><i id="checkGate">掌握检查 · 0/3</i></div></div>
+              <button id="completeLesson" type="button">确认完成本节 <i>→</i></button>
+            </section>
+          </section>
+        </section>
+
+        <footer class="module02-footer">
+          <button id="previousLesson" type="button">← PREVIOUS</button>
+          <div><span>NEXT MISSION</span><b id="nextLessonName">02.02 · 启动在线建图</b></div>
+          <button id="nextLesson" type="button">NEXT MISSION →</button>
+        </footer>
+      </main>
+
+      <aside class="module02-status">
+        <div class="module02-status-inner">
+          <div class="module-status-title"><span>READINESS PANEL</span><b>02</b></div>
+          <div class="module02-gauge"><div><b id="module02GaugePercent">0%</b><span>NAVIGATION<br />READY</span></div></div>
+          <section class="prerequisite-readiness" id="prerequisiteReadiness">
+            <span>ENTRY READINESS / 建议前置</span>
+            <div><i id="readiness00">○</i><b>模块 00<small>环境与仿真基线</small></b></div>
+            <div><i id="readiness01">○</i><b>模块 01<small>Topic、TF 与控制</small></b></div>
+            <p id="readinessMessage">可以预览本章；真实实验前建议先完成前置模块。</p>
+          </section>
+          <section class="current-lesson-evidence">
+            <span>CURRENT LESSON / 当前任务证据</span>
+            <header><i id="statusLessonCode">02.01</i><b id="statusLessonTitle">先看懂 SLAM</b></header>
+            <div id="statusUnderstand"><i>01</i><b>先理解<small>当前进入点</small></b></div>
+            <div id="statusChain"><i>02</i><b>系统链<small>0 / 4 个节点</small></b></div>
+            <div id="statusLab"><i>03</i><b>真实实验<small>0 / 4 条证据</small></b></div>
+            <div id="statusVerify"><i>04</i><b>验收任务<small>等待实验证据</small></b></div>
+          </section>
+          <section class="current-action">
+            <span>CURRENT ACTION</span>
+            <b id="currentActionText">先查看第一个核心概念</b>
+            <button id="currentActionButton" type="button">带我到下一步 ↓</button>
+          </section>
+          <section class="terminal-matrix">
+            <span>TERMINAL RESPONSIBILITIES</span>
+            <div><i>SIM</i><b>仿真主进程<small>Gazebo · /clock · sensors</small></b></div>
+            <div><i>MAP</i><b>建图进程<small>slam_toolbox · keep running</small></b></div>
+            <div><i>INSP</i><b>只读检查<small>Topic · TF · lifecycle</small></b></div>
+            <div><i>CMD</i><b>运动命令<small>/cmd_vel · stop ready</small></b></div>
+            <div><i>RVIZ</i><b>空间证据<small>Map · Pose · Goal · Costmap</small></b></div>
+          </section>
+          <section class="lesson-quick-reference">
+            <span>THIS LESSON / QUICK REFERENCE</span>
+            <div id="lessonQuickCommands"></div>
+          </section>
+        </div>
+      </aside>
+    </div>
+
+    <div class="toast" id="module02Toast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./module-02-content.js?v=20260818a"></script>
+    <script src="./module-02-app.js?v=20260818f"></script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 通信基础课程模块" />
+    <title>01 · ROS 2 通信基础 | AXIS/ROS</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-01.css?v=20260818g" />
+  </head>
+  <body class="module01-body">
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="返回课程首页"><span class="brand-symbol"><i></i><i></i><i></i></span><span><b>AXIS</b><em>/ROS</em><small>COMMUNICATION FUNDAMENTALS</small></span></a>
+      <div class="top-center"><span class="live-dot"></span>MODULE 01 LEARNING CONSOLE<span class="coordinate">ROS_DISTRO / HUMBLE</span></div>
+      <div class="top-actions"><div class="profile">HZ<span>CADET / 07</span></div></div>
+    </header>
+
+    <div class="module01-shell">
+      <aside class="module01-nav">
+        <div class="module01-title course-rail-header"><span>COURSE MODULE</span><div><b>01</b><strong>ROS 2 通信基础</strong><small>COMMUNICATION BASICS</small></div></div>
+        <div class="module01-progress"><div><span>模块进度</span><b id="module01Percent">0%</b></div><div class="module01-track"><i id="module01Bar"></i></div><small>8 MISSIONS · 278 MIN + PRACTICE</small></div>
+        <nav class="course-module-links course-rail-nav" aria-label="课程模块"><span>COURSE ROUTE / 全局导航</span><a href="./index.html"><span>HOME</span><div><b>课程首页</b><small>总览 · 路线 · 进度</small></div><i>⌂</i></a><a href="./module-00.html"><span>00</span><div><b>环境部署</b><small>Docker · Gazebo · Workspace</small></div><i id="module00State">—</i></a><a class="active" href="./module-01.html" aria-current="page"><span>01</span><div><b>ROS 2 通信基础</b><small>Nodes · Topics · TF · RViz</small></div><i>→</i></a><a href="./module-02.html"><span>02</span><div><b>SLAM 与自主导航</b><small>Slam Toolbox · Nav2 · AMCL</small></div><i>→</i></a><a href="./module-03.html"><span>03</span><div><b>创建 ROS 2 功能包</b><small>Python · colcon · rclpy</small></div><i>→</i></a><a href="./module-04.html"><span>04</span><div><b>轮式里程计</b><small>JointState · Pose · TF</small></div><i>→</i></a></nav>
+        <div class="mission-filter"><span>FIND A MISSION</span><div><i>⌕</i><input id="missionFilterInput" aria-label="搜索学习任务" placeholder="搜索 Topic、TF、Service…" /></div><small id="missionFilterCount">8 MISSIONS VISIBLE</small></div>
+        <nav class="foundation-list" aria-label="通信基础章节">
+          <button class="active" data-mission="intro"><span>01.01</span><div><small>FOUNDATION</small><b>ROS 2 到底是什么</b><em>Framework · DDS · CLI</em></div><i>→</i></button>
+          <button data-mission="nodes"><span>01.02</span><div><small>COMPUTATION</small><b>节点与计算图</b><em>Node · Discovery · Graph</em></div><i>02</i></button>
+          <button data-mission="topics"><span>01.03</span><div><small>DATA FLOW</small><b>Topic 与消息</b><em>Pub · Sub · Interface</em></div><i>03</i></button>
+          <button data-mission="control"><span>01.04</span><div><small>PRACTICAL LAB</small><b>控制 Andino 底盘</b><em>Twist · Safety · QoS</em></div><i>04</i></button>
+          <button data-mission="rviz"><span>01.05</span><div><small>VISUALIZATION</small><b>RViz 传感器世界</b><em>Laser · Camera · Frame</em></div><i>05</i></button>
+          <button data-mission="transforms"><span>01.06</span><div><small>SPATIAL DATA</small><b>TF 时间与变换调试</b><em>Buffer · Timestamp · Echo</em></div><i>06</i></button>
+          <button data-mission="services"><span>01.07</span><div><small>REQUEST / RESPONSE</small><b>服务与客户端</b><em>Server · Client · Interface</em></div><i>07</i></button>
+          <button data-mission="assessment"><span>01.08</span><div><small>MODULE CHECK</small><b>模块综合验收</b><em>Debug · Explain · Operate</em></div><i>08</i></button>
+        </nav>
+        <section class="side-learning-map" aria-label="阶段学习路线">
+          <header><span>阶段学习路线</span><small>点击阶段，从该阶段第一项未完成任务继续</small></header>
+          <button data-phase-missions="intro,nodes,topics" data-jump-mission="intro"><i>01</i><span><b>建立通信模型</b><small data-phase-progress>0 / 3 完成</small><em data-phase-action>从 01.01 开始 →</em></span></button>
+          <button data-phase-missions="control,rviz" data-jump-mission="control"><i>02</i><span><b>操作与观察机器人</b><small data-phase-progress>0 / 2 完成</small><em data-phase-action>从 01.04 开始 →</em></span></button>
+          <button data-phase-missions="transforms,services" data-jump-mission="transforms"><i>03</i><span><b>空间与请求响应</b><small data-phase-progress>0 / 2 完成</small><em data-phase-action>从 01.06 开始 →</em></span></button>
+          <button data-phase-missions="assessment" data-jump-mission="assessment"><i>04</i><span><b>综合验收</b><small data-phase-progress>0 / 1 完成</small><em data-phase-action>进入 01.08 →</em></span></button>
+        </section>
+        <section class="phase-coach"><span>当前学习建议</span><b id="phaseCoachTitle">继续 01.01 · ROS 2 到底是什么</b><p id="phaseCoachText">先建立概念模型，再进入数据追踪和终端实验。</p><button id="phaseCoachAction" type="button">继续当前任务 →</button></section>
+      </aside>
+
+      <main class="module01-main">
+        <section class="module01-hero">
+          <div><span>LEARNING PATH / MODULE 01</span><h1>让多个程序<br /><em>组成一个机器人。</em></h1><p>ROS 2 的核心不是某个单独算法，而是一套让传感器、控制器、定位与规划程序彼此发现并交换数据的规则。本模块从零建立通信模型，再进入真实机器人实验。</p></div>
+          <div class="module-blueprint"><div class="blueprint-title"><span>ROS GRAPH / MODULE MAP</span><b>8 MISSIONS</b></div><svg viewBox="0 0 620 390" aria-hidden="true"><path class="graph-wire" d="M110 195H225M295 195H405M475 195H550M260 160V90M440 160V90M260 230V300M440 230V300"/><g class="bp-node core"><rect x="225" y="160" width="70" height="70"/><text x="260" y="190">ROS</text><text x="260" y="207">GRAPH</text></g><g class="bp-node"><rect x="55" y="165" width="110" height="60"/><text x="110" y="190">SENSOR NODE</text><text x="110" y="207">/scan</text></g><g class="bp-node"><rect x="405" y="160" width="70" height="70"/><text x="440" y="190">TOPIC</text><text x="440" y="207">/cmd_vel</text></g><g class="bp-node"><rect x="510" y="165" width="90" height="60"/><text x="555" y="190">DRIVER</text><text x="555" y="207">MOTOR</text></g><g class="bp-node small"><rect x="215" y="40" width="90" height="50"/><text x="260" y="69">SERVICE</text></g><g class="bp-node small"><rect x="395" y="40" width="90" height="50"/><text x="440" y="69">ACTION</text></g><g class="bp-node small"><rect x="215" y="300" width="90" height="50"/><text x="260" y="329">TF TREE</text></g><g class="bp-node small"><rect x="395" y="300" width="90" height="50"/><text x="440" y="329">QOS / DDS</text></g></svg></div>
+        </section>
+
+        <section class="mission-selector-guide"><div><span>STARTING POINT</span><b id="missionGuideTitle">01.01 · ROS 2 到底是什么</b></div><div><span>WHY FIRST</span><b id="missionGuideWhy">先建立全局模型，后面的命令才不会变成死记硬背</b></div><button id="missionJump">开始当前任务 ↓</button></section>
+
+        <section class="foundation-mission" id="foundationMission">
+          <header class="foundation-head"><div><span id="foundationCode">MISSION 01.01</span><p id="foundationCategory">FOUNDATION / MENTAL MODEL</p><h2 id="foundationTitle">ROS 2 到底是什么？</h2><p id="foundationIntro">先建立一张整体地图：ROS 2 提供通信、工具、库和软件组织方式，但它不是传统意义上的操作系统。</p></div><div class="foundation-duration"><span>ESTIMATED</span><b id="foundationTime">20</b><small>MINUTES</small></div></header>
+
+          <div class="newbie-route"><div><span>学完你能</span><b id="routeLearn">用自己的话解释 ROS 2、DDS、Node 和 Package</b></div><div><span>现在先做</span><b id="routeDo">查看系统分层，然后运行第一个 CLI 命令</b></div><div><span>课后任务</span><b id="routeAfter">向没有学过 ROS 的人做 60 秒解释</b></div></div>
+
+          <nav class="lesson-stage-nav" aria-label="本节学习阶段"><button class="active" data-lesson-stage="concept"><i>01</i><span><b>先理解</b><small>先建立知识图谱</small></span></button><button data-lesson-stage="trace"><i>02</i><span><b>追踪数据</b><small>依次看完四站</small></span></button><button data-lesson-stage="lab"><i>03</i><span><b>终端实验</b><small>一次只做一步</small></span></button><button data-lesson-stage="assessment"><i>04</i><span><b>诊断验收</b><small>证据齐了再进入</small></span></button></nav>
+          <div class="learning-guard module-learning-guard" id="moduleLearningGuard"><i>新手保护</i><div><b id="moduleGuardTitle">先建立一张简单的系统地图</b><small id="moduleGuardText">不用背术语。先知道数据从哪里来、经过哪里、最后被谁使用。</small></div><span id="moduleGuardState">理解阶段</span></div>
+
+          <section class="foundation-concept-console" data-lesson-stage-panel="concept"><nav id="foundationConcepts" aria-label="本节核心概念"></nav><article class="foundation-concept-inspector"><span id="foundationConceptLabel">CONCEPT / 01</span><h3 id="foundationConceptTitle">核心概念</h3><p id="foundationConceptDefinition">选择上方概念查看解释。</p><div><b>进一步理解</b><p id="foundationConceptDetail">这里会说明概念边界、常见误区和实际作用。</p></div></article></section>
+
+          <section class="mission-knowledge-map" data-lesson-stage-panel="concept">
+            <header><span>KNOWLEDGE GRAPH / 本节知识图谱</span><h3>把本节放回完整 ROS 2 系统中。</h3><p>从左到右读出数据或职责如何传递。点击任一节点，职责面板会说明它的输入、输出与边界。</p></header>
+            <div class="mission-knowledge-flow" id="missionKnowledgeFlow"></div>
+            <div class="mission-model-inspector"><span>SELECTED SYSTEM ROLE</span><h3 id="modelDetailTitle">当前系统角色</h3><p id="modelDetailText">点击上方节点查看它在系统中的输入、输出与职责边界。</p></div>
+            <div class="mission-knowledge-context"><div><span>前置知识</span><b id="missionKnowledgeBefore">先知道实验环境如何运行</b></div><div><span>本节要建立</span><b id="missionKnowledgeCurrent">建立完整的通信关系</b></div><div><span>后续会用于</span><b id="missionKnowledgeNext">下一节真实实验</b></div></div>
+          </section>
+
+          <section class="deep-dive-console" data-lesson-stage-panel="concept">
+            <div class="deep-dive-nav"><span>CONCEPT DEEP DIVE</span><button class="active" data-deep-tab="why"><i>01</i><b>为什么需要它</b><small>WHY IT EXISTS</small></button><button data-deep-tab="how"><i>02</i><b>内部如何工作</b><small>HOW IT WORKS</small></button><button data-deep-tab="pitfall"><i>03</i><b>新手常见误区</b><small>COMMON PITFALL</small></button><button data-deep-tab="field"><i>04</i><b>真实机器人场景</b><small>FIELD APPLICATION</small></button></div>
+            <div class="deep-dive-content"><span id="deepDiveLabel">WHY IT EXISTS</span><h3 id="deepDiveTitle">为什么机器人软件需要通信框架？</h3><p id="deepDiveText">传感器、驱动和算法的更新频率、开发语言与运行设备都可能不同。通信框架把这些差异隔离，让组件只依赖稳定接口。</p><div class="deep-dive-note"><b id="deepDiveNoteTitle">判断是否掌握</b><p id="deepDiveNoteText">你能解释“为什么不把所有功能写进一个程序”时，才算理解这一层。</p></div></div>
+          </section>
+
+          <section class="data-trace-section" data-lesson-stage-panel="trace" hidden>
+            <div class="trace-copy"><span>DATA TRACE / INTERACTIVE</span><h3 id="traceTitle">跟踪一条数据如何穿过系统</h3><p id="traceIntro">依次点击右侧四个阶段。不要只记命令，要知道每一步产生了什么证据。</p><div class="trace-inspector"><span id="traceStepLabel">STAGE / 01</span><b id="traceStepTitle">数据生产者</b><p id="traceStepText">节点创建符合消息接口的数据，并交给发布端点。</p><small class="trace-command-note">观察命令预览 · 本阶段不要求执行</small><code id="traceStepCode">ros2 node info /publisher</code></div></div>
+            <div class="trace-flow" id="traceFlow"><button class="active" data-trace-step="0"><i>01</i><span><b id="traceNode0">PRODUCER</b><small>产生数据</small></span></button><em>↓</em><button data-trace-step="1"><i>02</i><span><b id="traceNode1">INTERFACE</b><small>约束结构</small></span></button><em>↓</em><button data-trace-step="2"><i>03</i><span><b id="traceNode2">DDS TRANSPORT</b><small>发现与传输</small></span></button><em>↓</em><button data-trace-step="3"><i>04</i><span><b id="traceNode3">CONSUMER</b><small>处理数据</small></span></button></div>
+          </section>
+
+          <section class="foundation-lab" data-lesson-stage-panel="lab" hidden><div class="lab-copy"><span>新手终端实验</span><h3 id="labTitle">确认 ROS 2 命令行可用</h3><p id="labIntro">命令会按安全顺序出现。只操作当前亮起的一步，后续步骤会在确认真实证据后自动解锁。</p><div class="lab-prerequisite"><b>开始前先确认</b><p id="labPrerequisite">确认已经进入课程容器。</p></div><div class="lab-success"><b>做到什么才算完成</b><p id="labSuccess">能够看到 ros2 命令组，并知道 topic、node、pkg 分别查什么。</p></div><div class="lab-recovery"><b>如果这一步失败</b><p id="labRecovery">先保留完整错误，确认终端位置和前置程序；不要跳过当前步骤，也不要同时修改多个配置。</p></div></div><div class="foundation-terminal"><div class="terminal-head"><span>真实 ROS 2 终端</span><b>页面不会代替你执行</b></div><p class="terminal-disclaimer"><b>操作顺序：</b>① 先看 SIM / TALKER / LISTENER / INSPECT / COMMAND / SERVER / CLIENT，确认命令在哪个职责终端运行；② 复制并在真实终端执行；③ 只有输出符合“看到这个再确认”时才点击确认。看不到就停下排错，不要跳过。</p><div id="foundationCommands"></div><div class="foundation-output" id="foundationOutput"><i>READY</i> 从第一步开始，后续步骤暂时锁定。</div></div></section>
+
+          <section class="scenario-lab" data-lesson-stage-panel="assessment" hidden><div class="scenario-copy"><span>FIELD SCENARIO</span><h3 id="scenarioTitle">机器人系统出现了一个真实故障</h3><p id="scenarioText">请选择最合理的第一步。重点不是猜答案，而是按证据缩小问题范围。</p><div class="scenario-rule"><b>调试规则</b><p>先观察，再定位，最后修改。一次只验证一个假设。</p></div></div><div class="scenario-workbench"><div class="scenario-symptom"><span>OBSERVED SYMPTOM</span><b id="scenarioSymptom">两个节点都在运行，但彼此没有交换数据。</b></div><div class="scenario-options" id="scenarioOptions"></div><p class="scenario-feedback" id="scenarioFeedback">等待你的判断_</p></div></section>
+
+          <section class="foundation-summary" data-lesson-stage-panel="assessment" hidden><div><span>WHAT YOU LEARNED</span><h3>这一节结束后，检查自己是否真的掌握：</h3></div><div id="foundationChecks"></div></section>
+
+          <section class="foundation-after" data-lesson-stage-panel="assessment" hidden><span>AFTER MISSION</span><div><h3 id="foundationAfterTitle">60 秒解释挑战</h3><p id="foundationAfterText">不使用术语堆砌，向朋友解释 ROS 2 为什么能让多个程序组成一个机器人。</p><div class="completion-gates"><span id="cliGate">TERMINAL EVIDENCE · 0/3</span><span id="scenarioGate">SCENARIO · PENDING</span></div></div><button id="completeFoundation">COMPLETE MISSION <i>→</i></button></section>
+        </section>
+
+        <footer class="module01-footer"><button id="previousFoundation">← PREVIOUS</button><div><span>NEXT MISSION</span><b id="nextFoundationName">01.02 · 节点与计算图</b></div><button id="nextFoundation">NEXT MISSION →</button></footer>
+      </main>
+
+      <aside class="module01-status">
+        <div class="module-status-title"><span>LEARNING MAP</span><b>01</b></div>
+        <div class="module-gauge"><div><b id="foundationPercent">0%</b><span>FOUNDATION<br />COMPLETE</span></div></div>
+        <div class="current-mission-evidence"><span>CURRENT MISSION / 当前任务证据</span><header><i id="statusMissionCode">01.01</i><b id="statusMissionTitle">ROS 2 到底是什么</b></header><div id="missionConceptGate"><i>01</i><b>先理解<small>当前进入点</small></b></div><div id="missionTraceGate"><i>02</i><b>数据追踪<small>0 / 4 个节点</small></b></div><div id="missionLabGate"><i>03</i><b>终端实验<small>0 / 3 条证据</small></b></div><div id="missionAssessmentGate"><i>04</i><b>诊断验收<small>等待终端证据</small></b></div></div>
+        <div class="foundation-next"><span>CURRENT ACTION</span><b id="foundationNextAction">查看四层模型并运行第一个命令</b><button id="foundationStatusJump">带我到下一步 ↓</button></div>
+        <div class="quick-command-rail"><span>COMMAND QUICK REFERENCE</span><button data-copy-command="ros2 node list"><code>ros2 node list</code><small>查看节点</small><i>COPY</i></button><button data-copy-command="ros2 topic list"><code>ros2 topic list</code><small>查看 Topic</small><i>COPY</i></button><button data-copy-command="ros2 topic info /cmd_vel"><code>ros2 topic info /cmd_vel</code><small>检查接口</small><i>COPY</i></button><button data-copy-command="ros2 run tf2_tools view_frames"><code>ros2 run tf2_tools view_frames</code><small>生成 TF 树</small><i>COPY</i></button></div>
+        <div class="mini-glossary"><span>CORE GLOSSARY</span><details open><summary>Node <i>+</i></summary><p>独立运行的计算单元。</p></details><details><summary>Topic <i>+</i></summary><p>异步发布订阅数据通道。</p></details><details><summary>TF <i>+</i></summary><p>带时间的坐标变换关系。</p></details><details><summary>QoS <i>+</i></summary><p>DDS 的可靠性和历史策略。</p></details><details><summary>Service <i>+</i></summary><p>一次请求对应一次响应。</p></details></div>
+        <div class="debug-principles"><span>FIELD DEBUG PRINCIPLES</span><ol><li>确认进程是否存在</li><li>确认数据是否产生</li><li>确认接口是否匹配</li><li>确认 QoS 是否兼容</li><li>确认 TF 是否连通</li><li>修复后重复原始测试</li></ol></div>
+      </aside>
+    </div>
+    <div class="toast" id="moduleToast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./module-01-content.js?v=20260818f"></script>
+    <script src="./module-01-missions.js?v=20260818e"></script>
+    <script src="./module-01-app.js?v=20260818h"></script>
+  </body>
+</html>

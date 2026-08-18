@@ -1,0 +1,37 @@
+:root{--pkg-amber:#ffb547;--pkg-copper:#d9783a;--pkg-violet:#a88bff}
+.module03-body{--nav-blue:var(--pkg-amber);--nav-cyan:#64ded4;--nav-lime:#c8ff35;--nav-orange:var(--pkg-copper);--course-nav-accent:var(--pkg-amber);background:#090b0c}
+.module03-body .brand em{color:var(--pkg-amber)}
+.module03-body .course-rail-nav{--course-nav-accent:var(--pkg-amber)}
+.module03-body .live-dot{background:var(--pkg-amber);box-shadow:0 0 12px var(--pkg-amber)}
+.module03-body .module02-nav,.module03-body .module02-status{background-color:#0d1011;background-image:linear-gradient(90deg,transparent 0,transparent calc(100% - 14px),rgba(255,181,71,.045) calc(100% - 14px)),repeating-linear-gradient(0deg,transparent 0,transparent 39px,rgba(154,139,110,.055) 40px)}
+.module03-body .module02-nav::after,.module03-body .module02-status::after{background:linear-gradient(140deg,rgba(255,181,71,.075),transparent 230px)}
+.module03-body .module02-main{background-color:#0c1011;background-image:linear-gradient(rgba(154,139,110,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(154,139,110,.055) 1px,transparent 1px);background-size:30px 30px}
+.module03-body .module02-hero{border-bottom-color:#50452f}
+.module03-body .module02-hero-copy{background:radial-gradient(circle at 18% 34%,rgba(255,181,71,.085),transparent 42%)}
+.module03-body .module02-hero h1 em{-webkit-text-stroke-color:#e6d8bf}
+.module03-body .module02-entry-guide{border-bottom-color:#765d32;background:linear-gradient(90deg,#1c1811,#111617)}
+.module03-body .lesson-head{background:linear-gradient(125deg,#272015,#0b0e0f)}
+.module03-body .concept-inspector{background-image:linear-gradient(rgba(255,181,71,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,181,71,.035) 1px,transparent 1px)}
+.module03-body .system-chain-nodes{background:radial-gradient(circle at center,rgba(255,181,71,.085),transparent 60%)}
+.module03-body .module02-command.current,.module03-body .current-lesson-evidence>div.active{background:linear-gradient(90deg,rgba(255,181,71,.075),transparent)}
+.package-blueprint{background:radial-gradient(circle at 49% 52%,#302719,#090c0d 71%)}
+.package-blueprint pattern path{fill:none;stroke:rgba(255,181,71,.075);stroke-width:1}
+.pkg-grid{fill:url(#pkgGrid);stroke:#655538}
+.pkg-folder path:first-child{fill:#121718;stroke:var(--pkg-amber);stroke-width:3}
+.pkg-folder path:last-child{fill:none;stroke:#8d8069;stroke-width:4;stroke-linecap:square}
+.pkg-file rect{fill:#101415;stroke:#d9c8aa;stroke-width:2}
+.pkg-file path{fill:none;stroke:#7f7462;stroke-width:4}
+.pkg-file text,.pkg-build text{fill:#d9c8aa;font:10px var(--mono)}
+.pkg-flow,.pkg-run-line{fill:none;stroke:#64ded4;stroke-width:3;stroke-dasharray:9 7;filter:url(#pkgGlow)}
+.pkg-build rect{fill:#171a18;stroke:#64ded4;stroke-width:3}
+.pkg-node circle:first-child{fill:#17150f;stroke:var(--pkg-amber);stroke-width:3;filter:url(#pkgGlow)}
+.pkg-node circle:nth-child(2){fill:var(--pkg-amber)}
+.pkg-node path{fill:none;stroke:var(--pkg-amber);stroke-width:3}
+.module03-body .blueprint-labels text{fill:#9b8d75}
+.module03-body .course-rail-nav .active{background:linear-gradient(90deg,rgba(255,181,71,.14),transparent)}
+.module03-body .module02-status-inner{background:linear-gradient(180deg,rgba(15,16,14,.99),rgba(9,12,13,.99))}
+
+@media(max-width:1180px){.module03-body .module02-shell{grid-template-columns:238px minmax(660px,1fr)238px}.module03-body .course-rail-nav.course-rail-nav a{min-height:72px}.module03-body .prerequisite-readiness,.module03-body .current-lesson-evidence,.module03-body .current-action,.module03-body .terminal-matrix,.module03-body .lesson-quick-reference{margin-inline:10px}}
+@media(max-width:860px){.module03-body .module02-shell{display:block}.package-blueprint{min-height:455px}}
+@media(max-width:620px){.package-blueprint{min-height:390px}.package-blueprint svg{transform:scale(.92)}}
+@media(max-width:390px){.module03-body{overflow-x:hidden}.package-blueprint svg{inset-inline:-28px;width:calc(100% + 56px);transform:scale(.88)}.module03-body .module02-hero h1{font-size:38px;letter-spacing:-2.8px}.module03-body .system-chain-nodes button{min-height:96px}.module03-body .system-chain-nodes button>em{font-size:9px}}

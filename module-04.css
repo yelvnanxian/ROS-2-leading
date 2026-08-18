@@ -1,0 +1,56 @@
+:root{--odom-teal:#45e0c1;--odom-copper:#d68a4a;--odom-blue:#69b9ff}
+.module04-body{--nav-blue:var(--odom-teal);--nav-cyan:#64ded4;--nav-lime:#c8ff35;--nav-orange:var(--odom-copper);--course-nav-accent:var(--odom-teal);background:#090b0c}
+.module04-body .brand em{color:var(--odom-teal)}
+.module04-body .course-rail-nav{--course-nav-accent:var(--odom-teal)}
+.module04-body .live-dot{background:var(--odom-teal);box-shadow:0 0 12px var(--odom-teal)}
+.module04-body .module02-nav,.module04-body .module02-status{background-color:#0d1011;background-image:linear-gradient(90deg,transparent 0,transparent calc(100% - 14px),rgba(69,224,193,.045) calc(100% - 14px)),repeating-linear-gradient(0deg,transparent 0,transparent 39px,rgba(104,145,138,.055) 40px)}
+.module04-body .module02-nav::after,.module04-body .module02-status::after{background:linear-gradient(140deg,rgba(69,224,193,.075),transparent 230px)}
+.module04-body .module02-main{background-color:#0c1011;background-image:linear-gradient(rgba(104,145,138,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(104,145,138,.055) 1px,transparent 1px);background-size:30px 30px}
+.module04-body .module02-hero{border-bottom-color:#2e5f55}
+.module04-body .module02-hero-copy{background:radial-gradient(circle at 18% 34%,rgba(69,224,193,.085),transparent 42%)}
+.module04-body .module02-hero h1 em{-webkit-text-stroke-color:#d4eee8}
+.module04-body .module02-entry-guide{border-bottom-color:#39796b;background:linear-gradient(90deg,#10211f,#111617)}
+.module04-body .lesson-head{background:linear-gradient(125deg,#132b27,#0b0e0f)}
+.module04-body .concept-inspector{background-image:linear-gradient(rgba(69,224,193,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(69,224,193,.035) 1px,transparent 1px)}
+.module04-body .system-chain-nodes{background:radial-gradient(circle at center,rgba(69,224,193,.085),transparent 60%)}
+.module04-body .module02-command.current,.module04-body .current-lesson-evidence>div.active{background:linear-gradient(90deg,rgba(69,224,193,.075),transparent)}
+.module04-body .blueprint-labels text{fill:#75978f}
+.module04-body .course-rail-nav .active{background:linear-gradient(90deg,rgba(69,224,193,.14),transparent)}
+.module04-body .module02-status-inner{background:linear-gradient(180deg,rgba(15,16,14,.99),rgba(9,12,13,.99))}
+
+@media(max-width:1180px){.module04-body .module02-shell{grid-template-columns:238px minmax(660px,1fr)238px}.module04-body .course-rail-nav.course-rail-nav a{min-height:72px}.module04-body .prerequisite-readiness,.module04-body .current-lesson-evidence,.module04-body .current-action,.module04-body .terminal-matrix,.module04-body .lesson-quick-reference{margin-inline:10px}}
+@media(max-width:860px){.module04-body .module02-shell{display:block}}
+
+/* Module 04 uses a wheel-and-pose blueprint instead of the package assembly motif. */
+.odometry-blueprint{background:radial-gradient(circle at 48% 50%,#12352f,#080d0e 72%)}
+.odometry-blueprint pattern path{fill:none;stroke:rgba(69,224,193,.075);stroke-width:1}
+.odom-grid{fill:url(#odomGrid);stroke:#35675e}
+.odom-wheels circle{fill:#101718;stroke:var(--odom-copper);stroke-width:3}
+.odom-wheels path{fill:none;stroke:#d8b58d;stroke-width:3}
+.odom-chassis rect:first-child{fill:#0e1516;stroke:#637d78;stroke-width:2}
+.odom-chassis path{fill:none;stroke:rgba(69,224,193,.28);stroke-width:1.5;stroke-dasharray:7 6}
+.odom-flow{fill:none;stroke:var(--odom-teal);stroke-width:3;stroke-dasharray:9 7;filter:url(#odomGlow)}
+.odom-equation rect{fill:#111c1b;stroke:var(--odom-teal);stroke-width:2}
+.odom-equation text{fill:#cce7e2;font:11px var(--mono)}
+.odom-message rect{fill:#111817;stroke:var(--odom-blue);stroke-width:2.5}
+.odom-message path{fill:none;stroke:#8ebcc3;stroke-width:3}
+.odom-message circle{fill:var(--odom-copper);filter:url(#odomGlow)}
+.odom-axis{fill:none;stroke:#7fa79f;stroke-width:2}
+.module04-body .blueprint-labels text{fill:#75978f}
+.module04-body .blueprint-legend .orange{background:var(--odom-copper)}
+.module04-body .command-main code{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.module04-body .lesson-quick-reference code{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.module04-body .prerequisite-readiness>div{min-height:40px}
+.module04-body .module02-status-inner{padding-bottom:24px}
+.module04-body .module02-lesson-list button b,
+.module04-body .course-rail-nav b{overflow-wrap:normal;word-break:keep-all}
+@media(max-width:860px){.odometry-blueprint{min-height:455px}}
+@media(max-width:620px){.odometry-blueprint{min-height:390px}.odometry-blueprint svg{transform:scale(.92)}}
+@media(max-width:390px){
+  .module04-body{overflow-x:hidden}
+  .odometry-blueprint svg{inset-inline:-28px;width:calc(100% + 56px);transform:scale(.86)}
+  .module04-body .module02-hero h1{font-size:36px;letter-spacing:-2.5px}
+  .module04-body .command-main code{font-size:8px;line-height:1.7}
+  .module04-body .system-chain-nodes button{min-height:98px}
+  .module04-body .system-chain-nodes button>em{font-size:9px}
+}

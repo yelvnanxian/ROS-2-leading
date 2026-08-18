@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 RViz 传感器可视化交互课程" />
+    <title>01.05 · RViz 传感器世界 | AXIS/ROS</title>
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./lesson-01-05.css" />
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="./module-01.html" aria-label="返回 ROS 2 通信基础模块">
+        <span class="brand-symbol"><i></i><i></i><i></i></span>
+        <span><b>AXIS</b><em>/ROS</em><small>ROBOTICS TRAINING SYSTEM</small></span>
+      </a>
+      <div class="top-center"><span class="live-dot"></span>RVIZ VISUALIZATION CHANNEL ONLINE<span class="coordinate">FRAME / odom</span></div>
+      <div class="top-actions">
+        <button class="search-trigger" id="lessonSearchBtn"><span>⌕</span> SEARCH <kbd>⌘K</kbd></button>
+        <button class="profile">HZ<span>CADET / 07</span></button>
+      </div>
+    </header>
+
+    <div class="app-shell lesson-shell" id="lessonTop">
+      <aside class="syllabus lesson-syllabus">
+        <div class="aside-heading"><span>MODULE 01</span><b>ROS 2 BASICS</b></div>
+        <div class="chapter-progress">
+          <span>章节进度</span><b id="chapterPercent">0%</b>
+          <div class="metal-track"><i id="chapterBar"></i></div>
+          <small>MISSION 05 / 08</small>
+        </div>
+        <nav class="mission-list" aria-label="章节任务">
+          <a href="./lesson-01-04.html" class="mission-link done"><span>01.04</span><div><small>COMPLETED</small><b>控制 Andino 底盘</b></div><i>✓</i></a>
+          <a href="#lessonTop" class="mission-link active"><span>01.05</span><div><small>ACTIVE</small><b>RViz 传感器世界</b></div><i>→</i></a>
+          <button class="mission-link locked"><span>01.06</span><div><small>LOCKED</small><b>TF 时间与变换调试</b></div><i>⌁</i></button>
+          <button class="mission-link locked"><span>01.07</span><div><small>LOCKED</small><b>服务与客户端</b></div><i>⌁</i></button>
+          <button class="mission-link locked"><span>01.08</span><div><small>LOCKED</small><b>模块综合验收</b></div><i>⌁</i></button>
+        </nav>
+        <div class="lesson-prereq"><span>PREREQUISITE</span><b>开始前你需要知道</b><p>Node、Topic、消息类型，以及 map → odom → base_link 的基本关系。</p><a href="./lesson-01-04.html#step-4">复习上一课 TF →</a></div>
+      </aside>
+
+      <main class="main-console lesson-console">
+        <section class="rviz-hero">
+          <div class="hero-copy">
+            <div class="serial"><span>MISSION 01.05</span><i></i><span>VISUALIZATION</span></div>
+            <p class="overline">RVIZ / SENSOR DATA / DEBUGGING</p>
+            <h1>看见机器人<br /><span>看到的世界。</span></h1>
+            <p class="hero-intro">RViz 不是仿真器，它是一块连接 ROS 2 数据的工程仪表盘。完成本课后，你能主动添加雷达、相机与机器人模型，并根据状态颜色定位 Topic 或 TF 问题。</p>
+            <div class="mission-specs"><div><small>LEVEL</small><b>新手 / L1</b></div><div><small>FIELD TIME</small><b>35 MIN</b></div><div><small>OUTPUT</small><b>传感器监控面板</b></div></div>
+          </div>
+
+          <div class="rviz-hero-screen">
+            <div class="screen-label"><span>RVIZ / PREVIEW</span><b><i></i> 3 DISPLAYS ACTIVE</b></div>
+            <svg viewBox="0 0 620 470" role="img" aria-label="RViz 中的机器人雷达点云示意">
+              <defs><radialGradient id="floorFade"><stop stop-color="#263235"/><stop offset="1" stop-color="#0a0d0e"/></radialGradient></defs>
+              <rect width="620" height="470" fill="url(#floorFade)"/>
+              <g class="perspective-grid"><path d="M310 70L20 440M310 70L85 440M310 70L150 440M310 70L215 440M310 70L280 440M310 70L345 440M310 70L410 440M310 70L475 440M310 70L540 440M310 70L605 440M35 410H585M65 360H555M100 310H520M140 260H480M180 210H440M220 160H400M260 110H360"/></g>
+              <g class="hero-scan"><path d="M310 330L138 218M310 330L173 153M310 330L230 124M310 330L302 105M310 330L367 131M310 330L445 167M310 330L494 237"/><circle cx="138" cy="218" r="5"/><circle cx="173" cy="153" r="5"/><circle cx="230" cy="124" r="5"/><circle cx="302" cy="105" r="5"/><circle cx="367" cy="131" r="5"/><circle cx="445" cy="167" r="5"/><circle cx="494" cy="237" r="5"/></g>
+              <g class="hero-robot"><path d="M260 305h100l20 60-25 40h-90l-25-40z"/><rect x="279" y="275" width="62" height="33"/><circle cx="265" cy="383" r="15"/><circle cx="355" cy="383" r="15"/><path d="M310 275V244"/><circle cx="310" cy="237" r="8"/></g>
+              <g class="axis-marker"><path d="M310 330v-68M310 330h72M310 330l-47 39"/><text x="306" y="253">Z</text><text x="389" y="334">X</text><text x="251" y="380">Y</text></g>
+            </svg>
+            <div class="screen-status"><span>FIXED FRAME <b>odom</b></span><span>FPS <b>59.8</b></span><span>POINTS <b>360</b></span></div>
+          </div>
+        </section>
+
+        <section class="beginner-guide lesson-guide" id="lessonGuide">
+          <div><span>YOU ARE HERE</span><b id="lessonGuideStep">第 1 步 · 认识 RViz 界面</b><small id="lessonGuideContext">先分清 Displays、3D View 与 Fixed Frame</small></div>
+          <div><span>DO THIS NOW</span><b id="lessonGuideAction">点击界面上的 3 个热点逐一查看</b><small id="lessonGuideExpected">成功标志：能说出每个区域负责什么</small></div>
+          <button id="lessonGuideJump">GO TO CURRENT TASK <span>↓</span></button>
+        </section>
+
+        <section class="lesson-brief">
+          <div><span>WHY</span><h2>机器人数据不是“打开就能看见”。</h2><p>RViz 必须知道订阅哪个 Topic、用哪种 Display 解码，以及把数据变换到哪个 Fixed Frame。三者任何一个错误，画面都会空白或报错。</p></div>
+          <div class="visual-pipeline"><div><span>01</span><b>ROS TOPIC</b><small>/scan · /image_raw · /tf</small></div><i>→</i><div><span>02</span><b>RVIZ DISPLAY</b><small>LaserScan · Camera · TF</small></div><i>→</i><div><span>03</span><b>FIXED FRAME</b><small>map · odom · base_link</small></div></div>
+        </section>
+
+        <nav class="step-rail lesson-step-rail" aria-label="RViz 实验步骤">
+          <button class="active" data-target="rviz-step-1"><span>01</span><small>ORIENTATION</small><b>认识 RViz 界面</b></button>
+          <button data-target="rviz-step-2"><span>02</span><small>LASER DATA</small><b>添加雷达扫描</b></button>
+          <button data-target="rviz-step-3"><span>03</span><small>CAMERA DATA</small><b>观察相机画面</b></button>
+          <button data-target="rviz-step-4"><span>04</span><small>FRAME DEBUG</small><b>切换参考坐标</b></button>
+          <i id="lessonStepProgress"></i>
+        </nav>
+
+        <section class="lab-section" id="rviz-step-1">
+          <header class="section-header"><div><span>STEP / 01</span><h2>认识 RViz 界面</h2></div><b>预计 06 MIN</b></header>
+          <div class="step-guide"><div><span>学什么</span><b>知道数据入口、显示区域和参考系设置在哪</b></div><div><span>现在做</span><b>点击下面界面的三个编号热点</b></div><div><span>成功标志</span><b>能解释 Displays、3D View、Fixed Frame</b></div></div>
+          <div class="rviz-anatomy">
+            <div class="anatomy-app">
+              <div class="fake-menu">File　Panels　Help <span>RViz2</span></div>
+              <div class="fake-sidebar"><b>Displays</b><p>▾ Global Options</p><p>　Fixed Frame　<em>odom</em></p><p>▾ Grid</p><p>▾ RobotModel</p><button class="hotspot active" data-hotspot="displays">01</button></div>
+              <div class="fake-viewport"><div class="mini-floor"></div><div class="mini-robot"></div><div class="mini-axis"></div><button class="hotspot" data-hotspot="viewport">02</button></div>
+              <div class="fake-toolbar">Move Camera　Select　2D Pose Estimate　2D Goal Pose <button class="hotspot" data-hotspot="frame">03</button></div>
+            </div>
+            <aside class="anatomy-explain"><span id="anatomyNumber">AREA / 01</span><h3 id="anatomyTitle">Displays 面板</h3><p id="anatomyText">这里管理所有可视化插件。每个 Display 都订阅一种 ROS 数据，并显示 Topic、QoS、颜色、尺寸和状态。</p><div><b>新手检查</b><small id="anatomyCheck">Display 名称左侧应出现绿色勾选，Status 应为 OK。</small></div></aside>
+          </div>
+        </section>
+
+        <section class="lab-section" id="rviz-step-2">
+          <header class="section-header"><div><span>STEP / 02</span><h2>添加 LaserScan 雷达数据</h2></div><b>预计 10 MIN</b></header>
+          <div class="step-guide"><div><span>学什么</span><b>将 /scan 转换为可见的距离点</b></div><div><span>现在做</span><b>按引导添加 LaserScan 并选择 /scan</b></div><div><span>成功标志</span><b>机器人周围出现一圈青色扫描点</b></div></div>
+          <div class="display-builder">
+            <div class="builder-steps">
+              <span>GUIDED ACTION / LASERSCAN</span>
+              <button class="builder-step active" data-build="type"><i>1</i><span><b>选择 Display 类型</b><small>Add → By display type → LaserScan</small></span></button>
+              <button class="builder-step" data-build="topic"><i>2</i><span><b>设置 Topic</b><small>Topic → /scan</small></span></button>
+              <button class="builder-step" data-build="style"><i>3</i><span><b>调整显示样式</b><small>Style → Points · Size → 0.03</small></span></button>
+              <button id="addLaserDisplay">RUN GUIDED SETUP →</button>
+            </div>
+            <div class="live-rviz">
+              <div class="live-rviz-head"><span>RVIZ / 3D VIEW</span><b id="laserStatus">LASERSCAN / NOT CONFIGURED</b></div>
+              <div class="live-scene" id="rvizScene">
+                <div class="scene-grid"></div><div class="scene-robot"><i></i></div>
+                <div class="laser-ring" id="laserRing"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <div class="scene-axis"><span>X</span><span>Y</span></div>
+              </div>
+              <div class="display-status"><span><i id="laserStatusDot"></i> LaserScan</span><b id="laserStatusText">等待配置</b></div>
+            </div>
+          </div>
+          <div class="beginner-warning"><span>常见误区</span><p><b>Topic 存在不代表一定能显示。</b>如果 Status 显示 Transform 错误，先检查消息的 <code>frame_id</code> 能否变换到 Fixed Frame。</p></div>
+        </section>
+
+        <section class="lab-section" id="rviz-step-3">
+          <header class="section-header"><div><span>STEP / 03</span><h2>观察机器人相机</h2></div><b>预计 08 MIN</b></header>
+          <div class="step-guide"><div><span>学什么</span><b>理解图像 Topic 与 Camera Display</b></div><div><span>现在做</span><b>选择 /image_raw 并匹配传感器 QoS</b></div><div><span>成功标志</span><b>相机窗口持续刷新且 Status 为 OK</b></div></div>
+          <div class="camera-lab">
+            <div class="camera-monitor">
+              <div class="camera-head"><span>CAMERA / image_raw</span><b id="cameraFps">0.0 FPS</b></div>
+              <div class="camera-feed" id="cameraFeed"><div class="camera-placeholder"><i>◎</i><b>NO IMAGE SIGNAL</b><span>Choose topic and activate display</span></div><div class="robot-corridor"><div class="corridor-floor"></div><div class="corridor-box one"></div><div class="corridor-box two"></div><div class="corridor-horizon"></div><span>ANDINO CAM / RGB8</span></div></div>
+              <div class="camera-overlay"><span>640 × 480</span><span>RGB8</span><span id="cameraTime">T+00.000</span></div>
+            </div>
+            <div class="camera-config">
+              <span>DISPLAY CONFIGURATION</span><h3>Camera</h3>
+              <label>IMAGE TOPIC<select id="cameraTopic"><option value="none">— SELECT TOPIC —</option><option value="image">/image_raw</option><option value="info">/camera_info</option></select></label>
+              <label>RELIABILITY<select id="cameraReliability"><option value="best_effort">BEST EFFORT</option><option value="reliable">RELIABLE</option></select></label>
+              <label>OVERLAY ALPHA<output id="alphaOutput">1.0</output><input id="alphaRange" type="range" min="0.1" max="1" step="0.1" value="1" /></label>
+              <button id="activateCamera">ACTIVATE CAMERA DISPLAY →</button>
+              <div class="camera-help"><b>为什么默认用 Best Effort？</b><p>图像更新频率高，偶尔丢一帧通常比等待重传更可接受。</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lab-section" id="rviz-step-4">
+          <header class="section-header"><div><span>STEP / 04</span><h2>切换 Fixed Frame</h2></div><b>预计 11 MIN</b></header>
+          <div class="step-guide"><div><span>学什么</span><b>参考坐标如何改变观察视角</b></div><div><span>现在做</span><b>切换三个 Frame 并让机器人移动</b></div><div><span>成功标志</span><b>能解释为何机器人或世界在画面中移动</b></div></div>
+          <div class="frame-experiment">
+            <div class="frame-stage" id="frameStage">
+              <div class="world-grid"></div><div class="map-object a">A</div><div class="map-object b">B</div><div class="moving-robot" id="movingRobot"><i></i></div><div class="frame-origin"><span>X</span><span>Y</span></div>
+              <div class="frame-caption">VIEW FROM <b id="frameCaption">odom</b></div>
+            </div>
+            <div class="frame-controls">
+              <span>GLOBAL OPTIONS</span><h3>Fixed Frame</h3>
+              <button data-fixed="base"><b>base_footprint</b><small>机器人固定在中心，环境相对移动</small></button>
+              <button data-fixed="odom" class="active"><b>odom</b><small>起点固定，机器人在局部世界中移动</small></button>
+              <button data-fixed="map"><b>map</b><small>全局地图固定，用于导航与建图</small></button>
+              <button id="moveRobot">SIMULATE ROBOT MOTION <span>→</span></button>
+              <div class="frame-result" id="frameResult"><b>ODOM MODE</b><p>机器人会相对启动位置移动；轮式误差可能逐渐累积。</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rviz-diagnostics">
+          <div class="diag-head"><div><span>RVIZ STATUS GUIDE</span><h2>先看颜色，再决定查什么。</h2></div><b>DEBUG MATRIX / 02</b></div>
+          <div class="status-cards">
+            <article><i class="green"></i><span>GREEN / OK</span><h3>数据与 TF 正常</h3><p>Display 正在收到消息，并能变换到 Fixed Frame。</p></article>
+            <article><i class="yellow"></i><span>YELLOW / WARN</span><h3>暂时没有新数据</h3><p>检查发布频率、Topic 名称和仿真是否暂停。</p></article>
+            <article><i class="red"></i><span>RED / ERROR</span><h3>类型或 TF 不可用</h3><p>展开 Status 阅读完整报错，不要直接重启。</p></article>
+          </div>
+          <div class="diag-table"><div class="diag-row head"><span>画面症状</span><span>第一检查项</span><span>建议命令</span><span>可能原因</span></div><div class="diag-row"><b>LaserScan 空白</b><span>Display Status</span><code>ros2 topic hz /scan</code><span>无数据 / QoS 不匹配</span></div><div class="diag-row"><b>No transform</b><span>Fixed Frame</span><code>ros2 run tf2_ros tf2_echo odom laser_link</code><span>TF 链断开</span></div><div class="diag-row"><b>Camera 无画面</b><span>Image Topic</span><code>ros2 topic info /image_raw</code><span>选成 /camera_info</span></div></div>
+        </section>
+
+        <section class="assessment rviz-assessment">
+          <div class="assessment-copy"><span>MISSION CHECK / 02</span><h2>你能根据状态选择正确操作吗？</h2><p>LaserScan 的 Status 为红色，提示 “No transform from laser_link to odom”，但 <code>ros2 topic hz /scan</code> 显示 10 Hz。下一步应该做什么？</p></div>
+          <div class="answer-grid"><button data-correct="false"><span>A</span><b>提高雷达发布频率</b></button><button data-correct="true"><span>B</span><b>检查 odom 到 laser_link 的 TF 链</b></button><button data-correct="false"><span>C</span><b>把 Display 改成 Camera</b></button></div>
+          <p class="answer-feedback" id="rvizAnswerFeedback"></p>
+        </section>
+
+        <section class="mission-debrief rviz-debrief">
+          <div class="debrief-title"><span>WHAT YOU LEARNED</span><h2>完成本课后，你已经能搭建基础机器人监控面板。</h2><p>任务完成情况会随着上面的实际操作更新。</p></div>
+          <div class="capability-list"><div data-rviz-cap="ui"><i>01</i><span><b>识别 RViz 界面</b><small>Displays · 3D View · Fixed Frame</small></span></div><div data-rviz-cap="laser"><i>02</i><span><b>显示 LaserScan</b><small>选择类型、Topic 与样式</small></span></div><div data-rviz-cap="camera"><i>03</i><span><b>显示 Camera</b><small>配置图像 Topic 与 QoS</small></span></div><div data-rviz-cap="frame"><i>04</i><span><b>排查坐标问题</b><small>从 Status 定位到 TF 链</small></span></div></div>
+          <div class="independent-challenge"><span>AFTER-CLASS MISSION / 20 MIN</span><div><h3>创建一套自己的 RViz 监控布局并保存配置。</h3><p>至少包含 Grid、RobotModel、LaserScan、Camera 和 TF。保存为 <code>andino_debug.rviz</code>，重新启动后载入验证。</p></div><button id="rvizChecklistBtn">VIEW CHECKLIST <span>+</span></button><ol id="rvizChecklist" hidden><li>添加并命名 5 个 Display</li><li>将 Fixed Frame 设置为 odom</li><li>调整 LaserScan 点大小和颜色</li><li>保存配置并重新载入</li></ol></div>
+        </section>
+
+        <footer class="lesson-navigation"><a href="./lesson-01-04.html">← PREVIOUS · 01.04</a><div><span>NEXT MISSION</span><b>01.06 · TF 时间与变换调试</b></div><button id="finishRvizLesson">COMPLETE LESSON <span>→</span></button></footer>
+      </main>
+
+      <aside class="telemetry-panel lesson-control">
+        <div class="telemetry-title"><span>LESSON CONTROL</span><b>01.05</b></div>
+        <div class="radial-progress" id="rvizRadial" style="--progress: 0deg"><div><b id="rvizMissionPercent">0%</b><span>LESSON<br />PROGRESS</span></div></div>
+        <div class="objective-list">
+          <span>BEGINNER TASKS</span>
+          <label data-rviz-objective="ui"><i>01</i><span>认识 RViz 三个区域<small>CLICK 3 HOTSPOTS</small></span></label>
+          <label data-rviz-objective="laser"><i>02</i><span>添加 LaserScan<small>CONFIGURE /scan</small></span></label>
+          <label data-rviz-objective="camera"><i>03</i><span>激活 Camera<small>CONFIGURE /image_raw</small></span></label>
+          <label data-rviz-objective="frames"><i>04</i><span>比较三个 Fixed Frame<small>SWITCH ALL FRAMES</small></span></label>
+          <label data-rviz-objective="quiz"><i>05</i><span>通过任务验收<small>FINAL CHECK</small></span></label>
+        </div>
+        <div class="current-next"><span>CURRENT NEXT ACTION</span><b id="sideNextAction">点击 01、02、03 三个界面热点</b><button id="sideNextJump">TAKE ME THERE ↓</button></div>
+        <div class="mentor-card"><span>NEWBIE TIP</span><p>RViz 的红色状态不是“软件坏了”，而是它在明确告诉你缺少哪一段数据或变换。</p><button id="rvizHintBtn">GET STEP-BY-STEP HINT →</button></div>
+      </aside>
+    </div>
+
+    <div class="search-modal" id="lessonSearchModal" aria-hidden="true"><div class="search-box"><div><span>⌕</span><input id="lessonSearchInput" placeholder="搜索 RViz、LaserScan、Fixed Frame…"/><kbd>ESC</kbd></div><p>输入术语后可直接跳到对应实验</p><div class="search-results" id="lessonSearchResults"></div></div></div>
+    <div class="toast" id="lessonToast" role="status"></div>
+    <script src="./page-transition.js"></script>
+    <script src="./lesson-01-05.js"></script>
+  </body>
+</html>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AXIS ROS 2 Learning Lab — 面向新手的机器人系统学习路线" />
+    <title>AXIS/ROS · 机器人学习实验室</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818e"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./home.css?v=20260818g" />
+  </head>
+  <body class="home-body">
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="landing-header">
+      <div class="landing-header-inner">
+        <a class="landing-brand" href="./index.html" aria-label="AXIS ROS 首页">
+          <span class="brand-symbol"><i></i><i></i><i></i></span>
+          <span><b>AXIS</b><em>/ROS</em><small>ROBOTICS LEARNING LAB</small></span>
+        </a>
+        <nav class="landing-nav" aria-label="首页导航">
+          <a href="#project">项目介绍</a>
+          <a href="#curriculum">课程路线</a>
+          <a href="#method">学习方式</a>
+          <a href="#outcomes">最终成果</a>
+        </nav>
+        <div class="landing-header-status">
+          <span><i></i> LOCAL PROGRESS</span>
+          <b id="homePercent">0%</b>
+          <a id="headerContinue" href="./module-00.html">进入课程 <i>→</i></a>
+        </div>
+      </div>
+    </header>
+
+    <main id="homeTop">
+      <section class="landing-hero">
+        <div class="landing-hero-grid" aria-hidden="true"></div>
+        <div class="landing-hero-inner">
+          <div class="landing-hero-copy">
+            <div class="landing-kicker"><span>ROS 2 / BEGINNER FIELD PROGRAM</span><i></i><span>ANDINO PLATFORM</span></div>
+            <p class="landing-overline">从零建立机器人的系统思维</p>
+            <h1>不只学会命令，<em>真正读懂机器人。</em></h1>
+            <p class="landing-lead">一条面向新手的 ROS 2 实验路线。从可重复环境、通信与自主导航开始，亲手创建 Python 功能包，再把左右轮速推导成机器人 Pose 与 Odometry，把“会使用系统”推进到“能开发并验证系统”。</p>
+            <div class="landing-tags" aria-label="课程技术范围"><span>ROS 2 HUMBLE</span><span>DOCKER</span><span>GAZEBO</span><span>RVIZ</span><span>NAV2</span><span>PYTHON / ODOMETRY</span></div>
+            <div class="landing-actions">
+              <a class="landing-primary" id="continueLearning" href="./module-00.html">开始学习 <span>→</span></a>
+              <a class="landing-secondary" href="#curriculum">查看完整路线 <span>↓</span></a>
+            </div>
+            <div class="landing-resume">
+              <div class="landing-resume-head"><span>你的学习路线</span><b id="homeDataState">SYNCED</b></div>
+              <div class="landing-progress-track"><i id="homeProgressBar"></i></div>
+              <div class="landing-resume-meta"><span id="homeProgressMeta">0 / 36 CHECKPOINTS</span><span id="homeLastSync">等待读取本地进度</span></div>
+            </div>
+          </div>
+
+          <div class="landing-visual" aria-label="Andino 移动机器人系统示意图">
+            <div class="visual-head"><span>ANDINO / SYSTEM BLUEPRINT</span><b id="homeSystemState">READY TO START</b></div>
+            <div class="robot-stage">
+              <div class="radar-ring ring-one"></div><div class="radar-ring ring-two"></div><div class="radar-ring ring-three"></div>
+              <svg viewBox="0 0 620 520" role="img" aria-label="Andino 机器人顶视系统图">
+                <defs>
+                  <linearGradient id="landingMetal" x1="0" x2="1"><stop stop-color="#343e42"/><stop offset=".48" stop-color="#171d20"/><stop offset="1" stop-color="#465256"/></linearGradient>
+                  <filter id="landingGlow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <path class="visual-axis" d="M310 45V475M92 260H528"/>
+                <ellipse class="robot-shadow" cx="310" cy="370" rx="170" ry="42"/>
+                <g class="robot-wheel"><rect x="125" y="207" width="58" height="156" rx="22"/><path d="M139 230h30M139 260h30M139 290h30M139 320h30M139 345h30"/><rect x="437" y="207" width="58" height="156" rx="22"/><path d="M451 230h30M451 260h30M451 290h30M451 320h30M451 345h30"/></g>
+                <path class="robot-chassis" d="M203 145h214l38 54v164l-38 54H203l-38-54V199z"/>
+                <rect class="robot-deck" x="213" y="181" width="194" height="199" rx="7"/>
+                <rect class="robot-battery" x="239" y="299" width="142" height="48" rx="3"/>
+                <circle class="robot-lidar-base" cx="310" cy="241" r="57"/><circle class="robot-lidar" cx="310" cy="241" r="35"/><circle class="robot-lidar-core" cx="310" cy="241" r="6"/>
+                <path class="robot-scan" d="M310 241L158 96M310 241L310 54M310 241L462 96"/>
+                <circle class="robot-bolt" cx="224" cy="164" r="5"/><circle class="robot-bolt" cx="396" cy="164" r="5"/><circle class="robot-bolt" cx="224" cy="398" r="5"/><circle class="robot-bolt" cx="396" cy="398" r="5"/>
+                <text class="robot-label" x="310" y="332" text-anchor="middle">24V / DRIVE SYSTEM</text>
+              </svg>
+              <div class="visual-callout callout-host"><span>01</span><b>REPRODUCIBLE LAB</b><small>Docker · Humble · Gazebo</small></div>
+              <div class="visual-callout callout-graph"><span>02</span><b>OBSERVABLE GRAPH</b><small>Node · Topic · TF</small></div>
+              <div class="visual-callout callout-motion"><span>03</span><b>ROBOT BEHAVIOR</b><small>Sense · Plan · Act</small></div>
+              <div class="visual-signal"><i></i><span>SIMULATION LINK</span><b>ONLINE</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="landing-metrics course-dashboard">
+          <div class="metric-summary metric-progress"><small>OVERALL READINESS</small><b id="homeCheckpointCount">0 / 36</b><span>已开放章节完成度</span><i><em id="homeMetricProgressBar"></em></i></div>
+          <div class="metric-summary"><small>COURSE SCALE</small><b id="homeCourseScale">5 MODULES · 36 LESSONS</b><span id="homeOpenScale">5 个模块已开放</span></div>
+          <div class="metric-summary"><small>CURRENT FOCUS</small><b id="homeRouteLabel">00 · 环境部署</b><span id="homeRouteDetail">从当前学习证据继续，也可自主选章</span></div>
+          <div class="course-module-pulse" id="homeModuleOverview" aria-label="全部课程模块概览"></div>
+        </div>
+      </section>
+
+      <section class="landing-section project-section" id="project">
+        <div class="landing-section-head">
+          <div><span>PROJECT / 01</span><h2>你要构建的是一套完整的机器人系统。</h2></div>
+          <p>课程围绕 Andino 移动机器人展开。每个章节都对应系统中的一层，最终把环境、通信、感知、定位、规划与执行连成可解释、可调试的完整链路。</p>
+        </div>
+        <div class="project-story-grid">
+          <article class="project-story-main">
+            <div class="story-index">AX<br/>/01</div>
+            <div><span>FINAL MISSION</span><h3>让机器人知道世界、知道自己，并安全到达目标。</h3><p>你不仅会启动仿真，还会知道数据从哪里产生、经过什么接口、为什么会中断，以及应该用什么证据定位问题。</p></div>
+          </article>
+          <div class="system-chain">
+            <div><i>01</i><span><b>SENSE / 感知</b><small>LaserScan · Camera · JointState</small></span></div>
+            <em>→</em><div><i>02</i><span><b>LOCATE / 定位</b><small>TF · Odometry · AMCL</small></span></div>
+            <em>→</em><div><i>03</i><span><b>PLAN / 规划</b><small>Costmap · Planner · Nav2</small></span></div>
+            <em>→</em><div><i>04</i><span><b>ACT / 执行</b><small>/cmd_vel · Motor Driver</small></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="landing-section curriculum-section" id="curriculum">
+        <div class="landing-section-head compact">
+          <div><span>CURRICULUM / 02</span><h2>从实验室基线，到机器人自主行动。</h2></div>
+          <p>已开放章节可以直接进入；未开放章节展示整条项目路线，让你始终知道现在学的内容将用于哪里。</p>
+        </div>
+
+        <article class="next-action-card">
+          <div class="next-action-code"><span>NEXT</span><b>→</b></div>
+          <div class="next-action-copy"><span>根据本地进度生成</span><h3 id="homeNextTitle">00.01 · 认识实验环境</h3><p id="homeNextReason">从环境部署开始，先建立一套可重复的实验环境。</p></div>
+          <div class="next-action-meta"><span id="homeNextStage">STAGE 01 · UNDERSTAND</span><b id="homeNextProgress">TERMINAL EVIDENCE · 0 / 5</b></div>
+          <a id="homeNextButton" href="./module-00.html">继续这一步 <span>→</span></a>
+        </article>
+
+        <section class="chapter-directory" aria-labelledby="chapterDirectoryTitle">
+          <div class="chapter-directory-head"><div><span>DIRECT ACCESS / CHAPTER INDEX</span><h3 id="chapterDirectoryTitle">自主选择任意章节</h3></div><p>“继续学习”会跟随进度；下面的章节索引允许你直接跳到指定任务。已完成、进行中和未开始状态会实时更新。</p></div>
+          <div class="chapter-directory-list" id="chapterDirectoryList"></div>
+        </section>
+
+        <div class="home-module-grid">
+          <article class="home-module-card current" data-home-card="environment">
+            <div class="module-card-visual"><span>00</span><svg viewBox="0 0 260 140" aria-hidden="true"><rect x="18" y="20" width="224" height="35"/><rect x="32" y="69" width="196" height="23"/><rect x="49" y="105" width="162" height="18"/><path d="M48 37h48M48 80h63M67 114h54"/><circle cx="215" cy="37" r="5"/><circle cx="201" cy="80" r="4"/></svg></div>
+            <div class="home-card-top"><span>MODULE 00 / OPEN</span><b id="homeEnvStatus">READY</b></div>
+            <h3>环境部署</h3><p>理解 Host、Docker、ROS 2 和 Gazebo 的边界，建立可重置、可验证的机器人实验室。</p>
+            <ul><li>系统基线与平台要求</li><li>Docker 与工作空间挂载</li><li>Andino 仿真与环境验收</li></ul>
+            <div class="home-card-progress"><div><span id="homeEnvProgressText">0 / 5 TASKS</span><b id="homeEnvProgressPercent">0%</b></div><i><em id="homeEnvProgressBar"></em></i></div>
+            <a href="./module-00.html">进入环境部署 <span>→</span></a>
+          </article>
+
+          <article class="home-module-card" data-home-card="communication">
+            <div class="module-card-visual cyan"><span>01</span><svg viewBox="0 0 260 140" aria-hidden="true"><circle cx="52" cy="70" r="20"/><circle cx="130" cy="34" r="20"/><circle cx="208" cy="70" r="20"/><circle cx="130" cy="108" r="20"/><path d="M70 61l40-18M150 43l40 18M190 80l-40 18M110 98L70 80"/></svg></div>
+            <div class="home-card-top"><span>MODULE 01 / OPEN</span><b id="homeM01Status">AFTER 00</b></div>
+            <h3>ROS 2 通信基础</h3><p>从 Node、Topic 和消息接口开始，逐步进入底盘控制、RViz、TF、Service 与综合验收。</p>
+            <ul><li>ROS Graph 与 DDS</li><li>Topic、QoS 与机器人控制</li><li>TF、RViz 与现场诊断</li></ul>
+            <div class="home-card-progress"><div><span id="homeM01ProgressText">0 / 8 MISSIONS</span><b id="homeM01ProgressPercent">0%</b></div><i><em id="homeM01ProgressBar"></em></i></div>
+            <a href="./module-01.html">进入通信基础 <span>→</span></a>
+          </article>
+
+          <article class="home-module-card" data-home-card="navigation">
+            <div class="module-card-visual nav"><span>02</span><svg viewBox="0 0 260 140" aria-hidden="true"><path d="M25 115L75 34l45 53 35-62 80 90z"/><circle cx="75" cy="34" r="5"/><circle cx="120" cy="87" r="5"/><circle cx="155" cy="25" r="5"/><path d="M43 112c40-29 68 13 101-16 27-23 45-18 72-4"/></svg></div>
+            <div class="home-card-top"><span>MODULE 02 / OPEN</span><b id="homeM02Status">PREVIEW</b></div>
+            <h3>SLAM 与自主导航</h3><p>把传感器、TF 和运动控制连接到地图、定位、Costmap 与 Nav2 行为树。</p>
+            <ul><li>Slam Toolbox 建图与地图保存</li><li>AMCL 定位与 Costmap</li><li>Nav2 规划、控制与恢复</li></ul>
+            <div class="home-card-progress"><div><span id="homeM02ProgressText">0 / 8 MISSIONS</span><b id="homeM02ProgressPercent">0%</b></div><i><em id="homeM02ProgressBar"></em></i></div>
+            <a href="./module-02.html">进入自主导航 <span>→</span></a>
+          </article>
+
+          <article class="home-module-card" data-home-card="packages">
+            <div class="module-card-visual package"><span>03</span><svg viewBox="0 0 260 140" aria-hidden="true"><path d="M25 33h78l15 16h62v55H25z"/><rect x="147" y="22" width="87" height="66"/><path d="M161 40h58M161 52h43M161 64h58M76 107v18h88M190 95v30h-26"/><circle cx="190" cy="125" r="10"/></svg></div>
+            <div class="home-card-top"><span>MODULE 03 / OPEN</span><b id="homeM03Status">PREVIEW</b></div>
+            <h3>创建 ROS 2 功能包</h3><p>把 Python 源码组织成功能包，读懂元数据与 Node 生命周期，再通过 colcon、source 和 ros2 run 完成可交付构建。</p>
+            <ul><li>Turtle Nest 与 ament_python</li><li>package.xml、setup.py 与 rclpy</li><li>colcon、Overlay 与 Graph 验收</li></ul>
+            <div class="home-card-progress"><div><span id="homeM03ProgressText">0 / 7 MISSIONS</span><b id="homeM03ProgressPercent">0%</b></div><i><em id="homeM03ProgressBar"></em></i></div>
+            <a href="./module-03.html">进入功能包实验室 <span>→</span></a>
+          </article>
+
+          <article class="home-module-card" data-home-card="odometry">
+            <div class="module-card-visual odometry"><span>04</span><svg viewBox="0 0 260 140" aria-hidden="true"><circle cx="48" cy="43" r="20"/><circle cx="48" cy="100" r="20"/><rect x="86" y="28" width="78" height="88" rx="15"/><path d="M68 43h18M68 100h18M125 43v58M106 70h38M164 71h42M190 58l16 13-16 13"/><rect x="207" y="46" width="35" height="49" rx="4"/></svg></div>
+            <div class="home-card-top"><span>MODULE 04 / OPEN</span><b id="homeM04Status">PREVIEW</b></div>
+            <h3>轮式里程计</h3><p>从左右轮 JointState 出发，推导差速运动学，用仿真时间积分位姿，并发布可独立验收的 Odometry 消息。</p>
+            <ul><li>JointState 名称、轮速与单位</li><li>差速运动学、dt 与 Pose 积分</li><li>Odometry、Quaternion 与轨迹审查</li></ul>
+            <div class="home-card-progress"><div><span id="homeM04ProgressText">0 / 8 MISSIONS</span><b id="homeM04ProgressPercent">0%</b></div><i><em id="homeM04ProgressBar"></em></i></div>
+            <a href="./module-04.html">进入里程计实验室 <span>→</span></a>
+          </article>
+        </div>
+
+        <div class="future-route" aria-label="后续课程路线">
+          <div><i>05</i><span><b>路径规划系统</b><small>Costmap · Planner · BT</small></span></div>
+          <div><i>06</i><span><b>机器人项目交付</b><small>Launch · Params · Validation</small></span></div>
+          <div><i>07</i><span><b>传感器融合进阶</b><small>IMU · EKF · Localization</small></span></div>
+        </div>
+      </section>
+
+      <section class="landing-section method-section" id="method">
+        <div class="landing-section-head">
+          <div><span>LEARNING METHOD / 03</span><h2>每一步都回答三个新手问题。</h2></div>
+          <p>页面不会把命令堆给你，也不会假装替你完成实验。每节课先建立理解，再在真实终端操作，最后根据可观察证据验收。</p>
+        </div>
+        <div class="method-grid">
+          <article><i>01</i><span>UNDERSTAND</span><h3>我现在学什么？</h3><p>用系统模型、交互图和新手解释建立概念，不靠死记术语。</p><b>输出：能用自己的话解释</b></article>
+          <article><i>02</i><span>OPERATE</span><h3>我现在要做什么？</h3><p>明确命令在哪个终端执行、预期看到什么、失败后先检查哪里。</p><b>输出：留下真实终端证据</b></article>
+          <article><i>03</i><span>VERIFY</span><h3>怎样才算真正学会？</h3><p>完成诊断题、课后任务和行为验收，再进入下一个学习任务。</p><b>输出：能够独立复现与排错</b></article>
+        </div>
+      </section>
+
+      <section class="landing-section outcomes-section" id="outcomes">
+        <div class="outcomes-copy">
+          <span>CAPABILITY / 04</span><h2>完成基础路线后，你应该能独立完成这些事。</h2><p id="homeSideNote">先从第一项任务开始，首页会在每次进入时重新读取进度并告诉你下一步。</p>
+          <div class="outcomes-progress">
+            <div class="home-gauge" id="homeGauge"><div><b id="homeGaugePercent">0%</b><span>ROUTE<br/>COMPLETE</span></div></div>
+            <div><span>MODULE STATUS</span><p><b>00</b> ENVIRONMENT <em id="homeNode00">0 / 5</em></p><p><b>01</b> COMMUNICATION <em id="homeNode01">0 / 8</em></p><p><b>02</b> NAVIGATION <em id="homeNode02">0 / 8</em></p><p><b>03</b> PACKAGE BUILD <em id="homeNode03">0 / 7</em></p><p><b>04</b> ODOMETRY <em id="homeNode04">0 / 8</em></p><button id="refreshData" type="button">重新读取学习数据 ↻</button></div>
+          </div>
+        </div>
+        <div class="capability-grid">
+          <div><i>01</i><b>读懂 ROS Graph</b><p>判断节点、Topic、接口和数据方向。</p></div>
+          <div><i>02</i><b>控制并观察机器人</b><p>安全发布速度指令，并在 RViz 中检查传感器。</p></div>
+          <div><i>03</i><b>定位通信故障</b><p>从进程、数据、接口、QoS 和 TF 逐层收集证据。</p></div>
+          <div><i>04</i><b>构建自己的 ROS 2 包</b><p>创建 Python 功能包，构建 Overlay，并用 Graph 证据完成交付。</p></div>
+          <div><i>05</i><b>实现并验证轮式里程计</b><p>把 JointState 转为 Pose 与 Twist，识别累计漂移、轮滑和参数误差。</p></div>
+        </div>
+      </section>
+
+      <section class="landing-reference">
+        <div><span>OPEN COURSE BASELINE</span><h2>内容结构参考 Robotics &amp; ROS 2 Essentials。</h2><p>课程在参考仓库基础上重新组织为更适合新手的中文引导、交互实验和证据验收流程。</p></div>
+        <a href="https://github.com/henki-robotics/robotics_essentials_ros2" target="_blank" rel="noreferrer">查看参考仓库 <span>↗</span></a>
+      </section>
+    </main>
+
+    <footer class="landing-footer">
+      <div><a class="landing-brand" href="#homeTop"><span class="brand-symbol"><i></i><i></i><i></i></span><span><b>AXIS</b><em>/ROS</em><small>ROBOTICS LEARNING LAB</small></span></a><p>Understand the system. Observe the evidence. Move the robot.</p></div>
+      <div><span>COURSE STACK</span><b>ROS 2 HUMBLE · ANDINO · GAZEBO · RVIZ</b></div>
+      <div><span>LOCAL LEARNING DATA</span><b>STORED IN THIS BROWSER</b></div>
+    </footer>
+
+    <div class="toast" id="homeToast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./home.js?v=20260818g"></script>
+  </body>
+</html>

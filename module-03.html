@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ROS 2 Python 功能包创建、构建与运行新手课程" />
+    <title>03 · 创建 ROS 2 功能包 | AXIS/ROS</title>
+    <link rel="icon" href="data:," />
+    <script src="./entry-guard.js?v=20260818f"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-02.css?v=20260818f" />
+    <link rel="stylesheet" href="./module-03.css?v=20260818a" />
+  </head>
+  <body class="module02-body module03-body">
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topbar module02-topbar">
+      <a class="brand" href="./index.html" aria-label="返回课程首页"><span class="brand-symbol"><i></i><i></i><i></i></span><span><b>AXIS</b><em>/ROS</em><small>PACKAGE ASSEMBLY LAB</small></span></a>
+      <div class="top-center"><span class="live-dot"></span>MODULE 03 BUILD CONSOLE<span class="coordinate">ROS_DISTRO / HUMBLE</span></div>
+      <div class="top-actions"><div class="profile">HZ<span>CADET / 07</span></div></div>
+    </header>
+
+    <div class="module02-shell">
+      <aside class="module02-nav">
+        <div class="module02-title course-rail-header"><span>COURSE MODULE</span><div><b>03</b><strong>创建 ROS 2 功能包</strong><small>PYTHON · COLCON · RCLPY</small></div></div>
+        <div class="module02-progress"><div><span>模块进度</span><b id="module02Percent">0%</b></div><i><em id="module02Bar"></em></i><small>7 MISSIONS · PACKAGE BUILD ROUTE</small></div>
+        <nav class="course-module-links course-rail-nav" aria-label="课程模块">
+          <span>COURSE ROUTE / 全局导航</span>
+          <a href="./index.html"><span>HOME</span><div><b>课程首页</b><small>总览 · 路线 · 进度</small></div><i>⌂</i></a>
+          <a href="./module-00.html"><span>00</span><div><b>环境部署</b><small>Docker · Gazebo · Workspace</small></div><i id="module02EnvState">○</i></a>
+          <a href="./module-01.html"><span>01</span><div><b>ROS 2 通信基础</b><small>Nodes · Topics · TF · RViz</small></div><i id="module02CommState">○</i></a>
+          <a href="./module-02.html"><span>02</span><div><b>SLAM 与自主导航</b><small>Map · AMCL · Nav2</small></div><i id="module03NavState">○</i></a>
+          <a class="active" href="./module-03.html" aria-current="page"><span>03</span><div><b>创建 ROS 2 功能包</b><small>Python · colcon · rclpy</small></div><i>→</i></a>
+          <a href="./module-04.html"><span>04</span><div><b>轮式里程计</b><small>JointState · Pose · TF</small></div><i>→</i></a>
+        </nav>
+
+        <div class="mission-filter module02-filter"><span>FIND A MISSION</span><div><i>⌕</i><input id="module02Filter" aria-label="搜索功能包任务" placeholder="搜索 package、colcon、source…" /></div><small id="module02FilterCount">7 MISSIONS VISIBLE</small></div>
+        <nav class="module02-lesson-list" aria-label="创建 ROS 2 功能包章节">
+          <button class="active" data-lesson="package_model"><span>03.01</span><div><small>MENTAL MODEL</small><b>先看懂功能包</b><em>Workspace · Package · Entry</em></div><i>→</i></button>
+          <button data-lesson="creator_preflight"><span>03.02</span><div><small>PACKAGE CREATION</small><b>使用 Turtle Nest</b><em>Python · Node · Safe Create</em></div><i>02</i></button>
+          <button data-lesson="package_anatomy"><span>03.03</span><div><small>PACKAGE ANATOMY</small><b>读懂目录与元数据</b><em>XML · Setup · Resource</em></div><i>03</i></button>
+          <button data-lesson="python_node"><span>03.04</span><div><small>RCLPY CODE</small><b>读懂第一个 Node</b><em>Init · Spin · Shutdown</em></div><i>04</i></button>
+          <button data-lesson="build_overlay"><span>03.05</span><div><small>BUILD OVERLAY</small><b>colcon 与 source</b><em>Build · Install · Overlay</em></div><i>05</i></button>
+          <button data-lesson="run_inspect"><span>03.06</span><div><small>RUN + INSPECT</small><b>运行并观察 Graph</b><em>ros2 run · node info</em></div><i>06</i></button>
+          <button data-lesson="field_delivery"><span>03.07</span><div><small>MODULE CHECK</small><b>综合交付与恢复</b><em>Clean Shell · Handoff</em></div><i>07</i></button>
+        </nav>
+        <section class="module02-phase-map"><span>LEARNING PHASES</span><div><i>01</i><b>建立模型<small>03.01</small></b></div><div><i>02</i><b>创建与读懂<small>03.02–03.03</small></b></div><div><i>03</i><b>代码与构建<small>03.04–03.05</small></b></div><div><i>04</i><b>运行与交付<small>03.06–03.07</small></b></div></section>
+      </aside>
+
+      <main class="module02-main">
+        <section class="module02-hero module03-hero">
+          <div class="module02-hero-copy"><span>LEARNING PATH / MODULE 03</span><h1>把一段代码，<br /><em>装配成 ROS 2 程序。</em></h1><p>从工作空间与功能包的关系开始，用 Turtle Nest 创建标准 Python 骨架，读懂 package.xml、setup.py 和 rclpy Node，再通过 colcon、source 与 ros2 run 留下完整证据。</p><div class="hero-status-strip"><div><small>SOURCE</small><b>exercises_ws/src</b></div><div><small>OVERLAY</small><b>install/setup.bash</b></div><div><small>OUTPUT</small><b>/odometry_publisher</b></div></div></div>
+          <div class="navigation-blueprint package-blueprint" aria-label="ROS 2 Python 功能包装配蓝图">
+            <div class="blueprint-head"><span>PACKAGE PIPELINE / LIVE SCHEMATIC</span><b>7 MISSIONS</b></div>
+            <svg viewBox="0 0 620 470" role="img" aria-label="源码、功能包、构建覆盖层与节点运行关系图">
+              <defs><pattern id="pkgGrid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" /></pattern><filter id="pkgGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+              <rect class="pkg-grid" x="36" y="45" width="548" height="370" />
+              <g class="pkg-folder"><path d="M70 96h145l24 25h115v108H70z"/><path d="M88 146h244M88 172h170M88 198h208"/></g>
+              <g class="pkg-file"><rect x="393" y="78" width="142" height="175"/><path d="M414 113h99M414 141h75M414 169h99M414 197h61"/><text x="414" y="229">package.xml / setup.py</text></g>
+              <path class="pkg-flow" d="M148 274v56h132M464 274v56H340"/>
+              <g class="pkg-build"><rect x="220" y="304" width="180" height="74"/><text x="310" y="335" text-anchor="middle">COLCON BUILD</text><text x="310" y="358" text-anchor="middle">INSTALL OVERLAY</text></g>
+              <path class="pkg-run-line" d="M400 341h76"/><g class="pkg-node" transform="translate(520 341)"><circle r="36"/><circle r="9"/><path d="M-24 0h15M9 0h15M0-24v15M0 9v15"/></g>
+              <g class="blueprint-labels"><text x="76" y="78">SOURCE PACKAGE</text><text x="393" y="61">METADATA + ENTRY</text><text x="455" y="398">ROS GRAPH / NODE</text></g>
+            </svg>
+            <div class="blueprint-legend"><span><i class="lime"></i>SOURCE READY</span><span><i class="cyan"></i>BUILD PATH</span><span><i class="orange"></i>RUNTIME NODE</span></div>
+          </div>
+        </section>
+
+        <section class="module02-entry-guide"><div><span>CURRENT LESSON</span><b id="lessonGuideTitle">03.01 · 先看懂功能包</b></div><div><span>WHY NOW</span><b id="lessonGuideReason">先理解源码怎样变成 ros2 run 能找到的入口</b></div><button id="lessonGuideAction" type="button">进入本节初始界面 <i>↓</i></button></section>
+
+        <section class="module02-lesson" id="module02Lesson">
+          <header class="lesson-head"><div><span id="lessonCode">03.01</span><p id="lessonCategory">MENTAL MODEL / PACKAGE</p><h2 id="lessonTitle">先看懂功能包</h2><p id="lessonIntro"></p></div><div class="lesson-time"><span>ESTIMATED</span><b id="lessonTime">34</b><small>MINUTES</small></div></header>
+          <div class="lesson-route"><div><span>学完你能</span><b id="lessonLearn"></b></div><div><span>现在先做</span><b id="lessonDo"></b></div><div><span>课后任务</span><b id="lessonAfter"></b></div></div>
+          <nav class="module02-stage-nav" aria-label="本节学习阶段"><button class="active" data-stage="understand"><i>01</i><span><b>先理解</b><small>建立概念和前后关系</small></span></button><button data-stage="chain"><i>02</i><span><b>看装配链</b><small>依次追踪四个节点</small></span></button><button data-stage="lab"><i>03</i><span><b>做真实实验</b><small>一次只确认一步</small></span></button><button data-stage="verify"><i>04</i><span><b>验收与任务</b><small>诊断、复盘、交付</small></span></button></nav>
+          <div class="learning-guard module02-learning-guard" id="module02LearningGuard"><i>新手保护</i><div><b id="module02GuardTitle">先理解功能包</b><small id="module02GuardText">依次查看三个概念，先知道每层是谁读取、失败会出现什么。</small></div><span id="module02GuardState">理解阶段</span></div>
+
+          <section class="stage-panel understand-panel" data-stage-panel="understand">
+            <div class="prerequisite-card"><span>开始前先确认</span><p id="lessonPrerequisite"></p></div>
+            <div class="concept-workbench"><nav id="conceptSelector" aria-label="本节核心概念"></nav><article class="concept-inspector"><span id="conceptLabel">CONCEPT / 01</span><h3 id="conceptTitle">核心概念</h3><p id="conceptDefinition"></p><div><b>边界、误区与实际作用</b><p id="conceptDetail"></p></div></article></div>
+            <div class="knowledge-bridge"><div><span>从哪里接过来</span><b id="knowledgeBefore"></b></div><i>→</i><div><span>本节建立什么</span><b id="knowledgeCurrent"></b></div><i>→</i><div><span>下一节用在哪里</span><b id="knowledgeNext"></b></div></div>
+          </section>
+
+          <section class="stage-panel chain-panel" data-stage-panel="chain" hidden><header><div><span>ASSEMBLY CHAIN / INTERACTIVE</span><h3>沿箭头找到源码变成节点的每一站。</h3></div><p>四个节点必须按顺序查看。这里解释职责与故障边界；真正的创建、构建和运行放在下一阶段。</p></header><div class="system-chain-workbench"><div class="system-chain-nodes" id="systemChainNodes"></div><article class="system-node-inspector"><span id="systemNodeTag">NODE / 01</span><h3 id="systemNodeTitle"></h3><b id="systemNodeRole"></b><p id="systemNodeDetail"></p><div><span>观察点预览 · 暂不执行</span><code id="systemNodePreview"></code></div></article></div></section>
+
+          <section class="stage-panel lab-panel" data-stage-panel="lab" hidden><div class="lab-brief"><div><span>REAL TERMINAL LAB</span><h3 id="labTitle"></h3><p id="labIntro"></p></div><div><b>做到什么才算完成</b><p id="labSuccess"></p></div><div><b>失败时停在哪里</b><p id="labRecovery"></p></div></div><p class="terminal-honesty"><b>页面不会替你创建、构建或运行：</b>先核对 PREP、BUILD、RUN、INSPECT 或 GUI 职责，再在真实课程容器操作。只有看到匹配证据才确认；失败后保留原始错误。</p><div class="module02-command-list" id="module02Commands"></div><div class="module02-output" id="module02Output"><i>READY</i> 从第一步开始，后续步骤暂时锁定。</div></section>
+
+          <section class="stage-panel verify-panel" data-stage-panel="verify" hidden><div class="diagnostic-scenario"><div class="scenario-copy"><span>FIELD DIAGNOSIS</span><h3 id="scenarioTitle"></h3><div><span>OBSERVED SYMPTOM</span><b id="scenarioSymptom"></b></div><p id="scenarioQuestion"></p></div><div class="scenario-console"><div id="scenarioOptions"></div><p id="scenarioFeedback">先观察证据，再选择第一项检查_</p></div></div><section class="mastery-checks"><header><span>WHAT YOU LEARNED</span><h3>先用自己的话回答，再展开核对。</h3><p>所有问题只使用本节已经解释和操作过的内容。</p></header><div id="masteryChecks"></div></section><section class="after-mission"><span>AFTER LESSON / INDEPENDENT TASK</span><div><h3 id="afterTitle"></h3><p id="afterText"></p><b id="afterDeliverable"></b><div class="completion-gates"><i id="labGate">实验证据 · 0/4</i><i id="scenarioGate">诊断 · 待完成</i><i id="checkGate">掌握检查 · 0/3</i></div></div><button id="completeLesson" type="button">确认完成本节 <i>→</i></button></section></section>
+        </section>
+
+        <footer class="module02-footer"><button id="previousLesson" type="button">← MODULE 02</button><div><span>NEXT MISSION</span><b id="nextLessonName">03.02 · 创建功能包</b></div><button id="nextLesson" type="button">NEXT MISSION →</button></footer>
+      </main>
+
+      <aside class="module02-status"><div class="module02-status-inner"><div class="module-status-title"><span>READINESS PANEL</span><b>03</b></div><div class="module02-gauge"><div><b id="module02GaugePercent">0%</b><span>PACKAGE<br />READY</span></div></div><section class="prerequisite-readiness" id="prerequisiteReadiness"><span>ENTRY READINESS / 建议前置</span><div><i id="readiness00">○</i><b>模块 00<small>容器与挂载工作空间</small></b></div><div><i id="readiness01">○</i><b>模块 01<small>Node 与 ROS Graph</small></b></div><div><i id="readiness02">○</i><b>模块 02<small>系统链与证据化排错</small></b></div><p id="readinessMessage">允许预览；真实创建前建议先完成环境与 Node 基础。</p></section><section class="current-lesson-evidence"><span>CURRENT LESSON / 当前任务证据</span><header><i id="statusLessonCode">03.01</i><b id="statusLessonTitle">先看懂功能包</b></header><div id="statusUnderstand"><i>01</i><b>先理解<small>当前进入点</small></b></div><div id="statusChain"><i>02</i><b>装配链<small>0 / 4 个节点</small></b></div><div id="statusLab"><i>03</i><b>真实实验<small>0 / 4 条证据</small></b></div><div id="statusVerify"><i>04</i><b>验收任务<small>等待实验证据</small></b></div></section><section class="current-action"><span>CURRENT ACTION</span><b id="currentActionText">先查看第一个核心概念</b><button id="currentActionButton" type="button">带我到下一步 ↓</button></section><section class="terminal-matrix"><span>TERMINAL RESPONSIBILITIES</span><div><i>PREP</i><b>创建前检查<small>Path · Humble · Turtle Nest</small></b></div><div><i>BUILD</i><b>构建覆盖层<small>colcon · source · keep</small></b></div><div><i>RUN</i><b>运行节点<small>ros2 run · Ctrl+C</small></b></div><div><i>INSP</i><b>只读检查<small>package · executable · graph</small></b></div><div><i>IDE</i><b>编辑挂载源码<small>Python · metadata</small></b></div></section><section class="lesson-quick-reference"><span>THIS LESSON / QUICK REFERENCE</span><div id="lessonQuickCommands"></div></section></div></aside>
+    </div>
+
+    <div class="toast" id="module02Toast" role="status"></div>
+    <script src="./page-transition.js?v=20260818f"></script>
+    <script src="./module-03-content.js?v=20260818a"></script>
+    <script src="./module-03-app.js?v=20260818b"></script>
+  </body>
+</html>
