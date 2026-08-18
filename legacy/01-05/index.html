@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ROS 2 RViz 传感器可视化交互课程" />
     <title>01.05 · RViz 传感器世界 | AXIS/ROS</title>
-    <script src="./entry-guard.js?v=20260818e"></script>
+    <script src="../../assets/js/entry-guard.js?v=20260818e" data-course-root="../.."></script>
+    <link rel="stylesheet" href="../../assets/css/base.css" />
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="./lesson-01-05.css" />
   </head>
   <body>
     <div class="scanlines" aria-hidden="true"></div>
 
     <header class="topbar">
-      <a class="brand" href="./module-01.html" aria-label="返回 ROS 2 通信基础模块">
+      <a class="brand" href="../../modules/01/index.html" aria-label="返回 ROS 2 通信基础模块">
         <span class="brand-symbol"><i></i><i></i><i></i></span>
         <span><b>AXIS</b><em>/ROS</em><small>ROBOTICS TRAINING SYSTEM</small></span>
       </a>
@@ -33,13 +33,13 @@
           <small>MISSION 05 / 08</small>
         </div>
         <nav class="mission-list" aria-label="章节任务">
-          <a href="./lesson-01-04.html" class="mission-link done"><span>01.04</span><div><small>COMPLETED</small><b>控制 Andino 底盘</b></div><i>✓</i></a>
+          <a href="../01-04/index.html" class="mission-link done"><span>01.04</span><div><small>COMPLETED</small><b>控制 Andino 底盘</b></div><i>✓</i></a>
           <a href="#lessonTop" class="mission-link active"><span>01.05</span><div><small>ACTIVE</small><b>RViz 传感器世界</b></div><i>→</i></a>
           <button class="mission-link locked"><span>01.06</span><div><small>LOCKED</small><b>TF 时间与变换调试</b></div><i>⌁</i></button>
           <button class="mission-link locked"><span>01.07</span><div><small>LOCKED</small><b>服务与客户端</b></div><i>⌁</i></button>
           <button class="mission-link locked"><span>01.08</span><div><small>LOCKED</small><b>模块综合验收</b></div><i>⌁</i></button>
         </nav>
-        <div class="lesson-prereq"><span>PREREQUISITE</span><b>开始前你需要知道</b><p>Node、Topic、消息类型，以及 map → odom → base_link 的基本关系。</p><a href="./lesson-01-04.html#step-4">复习上一课 TF →</a></div>
+        <div class="lesson-prereq"><span>PREREQUISITE</span><b>开始前你需要知道</b><p>Node、Topic、消息类型，以及 map → odom → base_link 的基本关系。</p><a href="../01-04/index.html#step-4">复习上一课 TF →</a></div>
       </aside>
 
       <main class="main-console lesson-console">
@@ -184,7 +184,7 @@
           <div class="independent-challenge"><span>AFTER-CLASS MISSION / 20 MIN</span><div><h3>创建一套自己的 RViz 监控布局并保存配置。</h3><p>至少包含 Grid、RobotModel、LaserScan、Camera 和 TF。保存为 <code>andino_debug.rviz</code>，重新启动后载入验证。</p></div><button id="rvizChecklistBtn">VIEW CHECKLIST <span>+</span></button><ol id="rvizChecklist" hidden><li>添加并命名 5 个 Display</li><li>将 Fixed Frame 设置为 odom</li><li>调整 LaserScan 点大小和颜色</li><li>保存配置并重新载入</li></ol></div>
         </section>
 
-        <footer class="lesson-navigation"><a href="./lesson-01-04.html">← PREVIOUS · 01.04</a><div><span>NEXT MISSION</span><b>01.06 · TF 时间与变换调试</b></div><button id="finishRvizLesson">COMPLETE LESSON <span>→</span></button></footer>
+        <footer class="lesson-navigation"><a href="../01-04/index.html">← PREVIOUS · 01.04</a><div><span>NEXT MISSION</span><b>01.06 · TF 时间与变换调试</b></div><button id="finishRvizLesson">COMPLETE LESSON <span>→</span></button></footer>
       </main>
 
       <aside class="telemetry-panel lesson-control">
@@ -205,7 +205,7 @@
 
     <div class="search-modal" id="lessonSearchModal" aria-hidden="true"><div class="search-box"><div><span>⌕</span><input id="lessonSearchInput" placeholder="搜索 RViz、LaserScan、Fixed Frame…"/><kbd>ESC</kbd></div><p>输入术语后可直接跳到对应实验</p><div class="search-results" id="lessonSearchResults"></div></div></div>
     <div class="toast" id="lessonToast" role="status"></div>
-    <script src="./page-transition.js"></script>
-    <script src="./lesson-01-05.js"></script>
+    <script src="../../assets/js/page-transition.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>

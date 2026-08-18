@@ -6,18 +6,21 @@
   overlay.innerHTML = '<span>AXIS / ROUTE CHANGE</span><b>正在切换课程界面</b><i></i>';
   document.body.appendChild(overlay);
 
-  const routeLabels = {
-    'index.html':'课程首页',
-    'module-00.html':'00 · 环境部署',
-    'module-01.html':'01 · ROS 2 通信基础',
-    'module-02.html':'02 · SLAM 与自主导航',
-    'module-03.html':'03 · 创建 ROS 2 功能包'
-  };
+  const routeLabels = [
+    [/\/modules\/00(?:\/index\.html)?$/, '00 · 环境部署'],
+    [/\/modules\/01(?:\/index\.html)?$/, '01 · ROS 2 通信基础'],
+    [/\/modules\/02(?:\/index\.html)?$/, '02 · SLAM 与自主导航'],
+    [/\/modules\/03(?:\/index\.html)?$/, '03 · 创建 ROS 2 功能包'],
+    [/\/modules\/04(?:\/index\.html)?$/, '04 · 轮式里程计'],
+    [/\/legacy\/01-04(?:\/index\.html)?$/, '01.04 · 早期实验档案'],
+    [/\/legacy\/01-05(?:\/index\.html)?$/, '01.05 · 早期实验档案'],
+    [/(?:^|\/)index\.html$/, '课程首页'],
+    [/\/$/, '课程首页']
+  ];
 
   const labelFor = value => {
     const target = new URL(value, window.location.href);
-    const file = target.pathname.split('/').pop() || 'index.html';
-    return routeLabels[file] || '课程任务';
+    return routeLabels.find(([pattern]) => pattern.test(target.pathname))?.[1] || '课程任务';
   };
 
   const finishEntering = () => {

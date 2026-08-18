@@ -414,7 +414,7 @@ function renderTask(name, options = {}) {
   $('#previousSetupTask').disabled = false;
   $('#previousSetupTask').textContent = index === 0 ? '← COURSE HOME' : '← PREVIOUS';
   $('#nextSetupTask').textContent = index === taskOrder.length - 1 ? '进入模块 01 →' : '下一任务 →';
-  if (options.updateUrl !== false) history.replaceState(null, '', `./module-00.html?task=${encodeURIComponent(name)}`);
+  if (options.updateUrl !== false) history.replaceState(null, '', `./index.html?task=${encodeURIComponent(name)}`);
   if (options.scroll) $('.deployment-hero').scrollIntoView({behavior:'smooth', block:'start'});
   if (window.matchMedia('(max-width: 860px)').matches) {
     const taskRail = $('.setup-task-list');
@@ -505,8 +505,8 @@ $('#previousSetupTask').addEventListener('click', () => {
     renderTask(taskOrder[index - 1], {scroll:true});
     return;
   }
-  if (window.routeTo) window.routeTo('./index.html#curriculum');
-  else window.location.href = './index.html#curriculum';
+  if (window.routeTo) window.routeTo('../../index.html#curriculum');
+  else window.location.href = '../../index.html#curriculum';
 });
 $('#nextSetupTask').addEventListener('click', () => {
   const index = taskOrder.indexOf(currentTask);
@@ -516,8 +516,8 @@ $('#nextSetupTask').addEventListener('click', () => {
     return;
   }
   if (index === taskOrder.length - 1) {
-    if (window.routeTo) window.routeTo('./module-01.html');
-    else window.location.href = './module-01.html';
+    if (window.routeTo) window.routeTo('../01/index.html');
+    else window.location.href = '../01/index.html';
     return;
   }
   renderTask(taskOrder[index + 1], {scroll:true});

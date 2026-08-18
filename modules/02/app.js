@@ -584,7 +584,7 @@ function renderLesson(name, options) {
   $('#previousLesson').disabled = false;
   $('#previousLesson').textContent = index === 0 ? '← MODULE 01' : '← PREVIOUS';
   $('#nextLesson').textContent = index === lessonOrder.length - 1 ? '进入 MODULE 03 →' : 'NEXT MISSION →';
-  if (options.updateUrl !== false) history.replaceState(null, '', './module-02.html?lesson=' + encodeURIComponent(name));
+  if (options.updateUrl !== false) history.replaceState(null, '', './index.html?lesson=' + encodeURIComponent(name));
   if (options.clearSearch !== false) {
     $('#module02Filter').value = '';
     filterLessons();
@@ -655,8 +655,8 @@ function goToNextLesson() {
     return;
   }
   if (index === lessonOrder.length - 1) {
-    if (window.routeTo) window.routeTo('./module-03.html');
-    else window.location.href = './module-03.html';
+    if (window.routeTo) window.routeTo('../03/index.html');
+    else window.location.href = '../03/index.html';
     return;
   }
   renderLesson(lessonOrder[index + 1], {scroll:true});
@@ -709,7 +709,7 @@ $('#previousLesson').addEventListener('click', function () {
     renderLesson(lessonOrder[index - 1], {scroll:true});
     return;
   }
-  const target = './module-01.html?mission=assessment';
+  const target = '../01/index.html?mission=assessment';
   if (window.routeTo) window.routeTo(target);
   else window.location.href = target;
 });

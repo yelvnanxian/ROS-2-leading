@@ -601,7 +601,7 @@ function renderLesson(name, options) {
   $('#previousLesson').disabled = false;
   $('#previousLesson').textContent = index === 0 ? '← MODULE 03' : '← PREVIOUS';
   $('#nextLesson').textContent = index === lessonOrder.length - 1 ? '返回课程首页 →' : 'NEXT MISSION →';
-  if (options.updateUrl !== false) history.replaceState(null, '', './module-04.html?lesson=' + encodeURIComponent(name));
+  if (options.updateUrl !== false) history.replaceState(null, '', './index.html?lesson=' + encodeURIComponent(name));
   if (options.clearSearch !== false) {
     $('#module02Filter').value = '';
     filterLessons();
@@ -672,8 +672,8 @@ function goToNextLesson() {
     return;
   }
   if (index === lessonOrder.length - 1) {
-    if (window.routeTo) window.routeTo('./index.html');
-    else window.location.href = './index.html';
+    if (window.routeTo) window.routeTo('../../index.html');
+    else window.location.href = '../../index.html';
     return;
   }
   renderLesson(lessonOrder[index + 1], {scroll:true});
@@ -726,7 +726,7 @@ $('#previousLesson').addEventListener('click', function () {
     renderLesson(lessonOrder[index - 1], {scroll:true});
     return;
   }
-  const target = './module-03.html?lesson=field_delivery';
+  const target = '../03/index.html?lesson=field_delivery';
   if (window.routeTo) window.routeTo(target);
   else window.location.href = target;
 });

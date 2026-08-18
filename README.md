@@ -16,13 +16,23 @@ python3 -m http.server 4173
 
 ## 页面结构
 
-- `index.html`：课程首页，读取模块进度并给出下一步学习任务
-- `module-00.html`：00 环境部署，包含 00.01–00.05 五个可切换任务
-- `module-01.html`：01 ROS 2 通信基础，统一承载 01.01–01.08
-- `module-02.html`：02 SLAM 与自主导航，统一承载 02.01–02.08
-- `module-03.html`：03 创建 ROS 2 功能包，统一承载 03.01–03.07
-- `module-04.html`：04 轮式里程计，统一承载 04.01–04.08
-- `lesson-01-04.html`、`lesson-01-05.html`：早期独立实验页，仅作兼容保留；主路线请从首页进入
+```text
+.
+├── index.html             # 课程首页与网站新会话入口
+├── assets/
+│   ├── css/               # 全站基础样式与首页样式
+│   └── js/                # 首页逻辑、入口守卫与页面转场
+├── modules/
+│   ├── 00/                # 环境部署：页面、内容逻辑与模块样式
+│   ├── 01/                # ROS 2 通信基础
+│   ├── 02/                # SLAM 与自主导航
+│   ├── 03/                # 创建 ROS 2 功能包
+│   └── 04/                # 轮式里程计
+├── legacy/                # 早期独立实验页，仅作实现档案
+└── tests/                 # 浏览器端课程回归测试
+```
+
+每个正式模块都在 `modules/<编号>/` 内统一管理；主学习路线始终从课程首页进入。
 
 ## 当前课程结构
 
@@ -86,32 +96,11 @@ python3 -m http.server 4173
 
 ## 浏览器回归
 
-项目包含 `tests/course-smoke.cjs`，覆盖首页直达、00–04 URL/激活状态、Module 03/04 全小节初始界面、交互解锁、多行代码转义、跨模块跳转和 390px 横向溢出。运行前需要 Playwright Chromium：
+项目包含 `tests/course-smoke.cjs`，覆盖首页直达、目录化路由、00–04 URL/激活状态、Module 03/04 全小节初始界面、交互解锁、多行代码转义、跨模块跳转和 390px 横向溢出。运行前需要 Playwright Chromium：
 
 ```bash
 NODE_PATH=/path/to/node_modules node tests/course-smoke.cjs
 ```
-
-## 当前 Demo 任务
-
-- 理解 Docker、ROS 2 和 Gazebo 的系统分层
-- 按顺序启动容器与 Andino 仿真
-- 使用 CLI 检查 Topic 与 `geometry_msgs/msg/Twist`
-- 调节并发送线速度、角速度指令
-- 交互检查 `map → odom → base_link → sensor` TF 链
-- 模拟 DDS QoS 兼容关系并解读 `LaserScan` 数据
-- 根据故障现象选择诊断命令并完成任务验收
-
-### 01.05 · RViz 传感器世界
-
-- 认识 Displays、3D View 与 Fixed Frame
-- 引导添加并配置 `/scan` LaserScan Display
-- 配置 `/image_raw` Camera 与 Best Effort QoS
-- 比较 `base_footprint`、`odom`、`map` 三种观察方式
-- 根据 RViz 绿色、黄色、红色状态执行故障排查
-- 完成监控面板课后任务并保存 RViz 配置
-
-访问：<http://127.0.0.1:4173/lesson-01-05.html>
 
 ## 学习引导
 

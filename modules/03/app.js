@@ -592,7 +592,7 @@ function renderLesson(name, options) {
   $('#previousLesson').disabled = false;
   $('#previousLesson').textContent = index === 0 ? '← MODULE 02' : '← PREVIOUS';
   $('#nextLesson').textContent = index === lessonOrder.length - 1 ? '进入 MODULE 04 →' : 'NEXT MISSION →';
-  if (options.updateUrl !== false) history.replaceState(null, '', './module-03.html?lesson=' + encodeURIComponent(name));
+  if (options.updateUrl !== false) history.replaceState(null, '', './index.html?lesson=' + encodeURIComponent(name));
   if (options.clearSearch !== false) {
     $('#module02Filter').value = '';
     filterLessons();
@@ -663,8 +663,8 @@ function goToNextLesson() {
     return;
   }
   if (index === lessonOrder.length - 1) {
-    if (window.routeTo) window.routeTo('./module-04.html?lesson=odometry_model');
-    else window.location.href = './module-04.html?lesson=odometry_model';
+    if (window.routeTo) window.routeTo('../04/index.html?lesson=odometry_model');
+    else window.location.href = '../04/index.html?lesson=odometry_model';
     return;
   }
   renderLesson(lessonOrder[index + 1], {scroll:true});
@@ -717,7 +717,7 @@ $('#previousLesson').addEventListener('click', function () {
     renderLesson(lessonOrder[index - 1], {scroll:true});
     return;
   }
-  const target = './module-02.html?lesson=field_assessment';
+  const target = '../02/index.html?lesson=field_assessment';
   if (window.routeTo) window.routeTo(target);
   else window.location.href = target;
 });

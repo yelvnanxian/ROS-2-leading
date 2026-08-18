@@ -499,7 +499,7 @@ function renderMission(name, options = {}) {
   $('#previousFoundation').disabled = false;
   $('#previousFoundation').textContent = index === 0 ? '← MODULE 00' : '← PREVIOUS';
   $('#nextFoundation').textContent = index === order.length - 1 ? '进入 MODULE 02 →' : '下一任务 →';
-  if (options.updateUrl !== false) history.replaceState(null, '', `./module-01.html?mission=${encodeURIComponent(name)}`);
+  if (options.updateUrl !== false) history.replaceState(null, '', `./index.html?mission=${encodeURIComponent(name)}`);
   if (options.clearSearch !== false) {
     $('#missionFilterInput').value = '';
     filterMissions();
@@ -619,7 +619,7 @@ $('#previousFoundation').addEventListener('click', () => {
     renderMission(order[index - 1], {scroll:true});
     return;
   }
-  const target = './module-00.html?task=validation';
+  const target = '../00/index.html?task=validation';
   if (window.routeTo) window.routeTo(target);
   else window.location.href = target;
 });
@@ -631,8 +631,8 @@ $('#nextFoundation').addEventListener('click', () => {
     return;
   }
   if (index === order.length - 1) {
-    if (window.routeTo) window.routeTo('./module-02.html');
-    else window.location.href = './module-02.html';
+    if (window.routeTo) window.routeTo('../02/index.html');
+    else window.location.href = '../02/index.html';
     return;
   }
   renderMission(order[index + 1], {scroll:true});
